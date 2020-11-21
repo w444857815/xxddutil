@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: order-api
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      enabled: true
+      resolve-lazily: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  freemarker:
+    check-template-location: false
+
+  datasource:
+    #MySQL数据库支持配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.1.2.155:3306/sales_order_gd?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: dxhy
+    password: Dxhy@123
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 100
+      idle-timeout: 600000
+      pool-name: OrderHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 60000
+      connection-test-query: SELECT 1
+
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled : false
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+
+
+mybatis:
+  mapper-locations: classpath:mybatis/*/*.xml
+  config-location: classpath:mybatis/mybatis-config.xml
+  type-aliases-package: com.example.demo.dao
+
+server:
+  port: 8080
+  servlet:
+    context-path: /order-api
+  max-http-header-size: 4048576
+# 0 mysql 1 oracle
+dataType: 0

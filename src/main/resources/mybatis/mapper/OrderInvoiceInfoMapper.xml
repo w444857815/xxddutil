@@ -1,0 +1,1388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxhy.order.dao.OrderInvoiceInfoMapper">
+    <resultMap id="BaseResultMap"
+               type="com.dxhy.order.model.OrderInvoiceInfo">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="order_info_id" jdbcType="VARCHAR"
+                property="orderInfoId"/>
+        <result column="order_process_info_id" jdbcType="VARCHAR"
+                property="orderProcessInfoId"/>
+        <result column="fpqqlsh" jdbcType="VARCHAR" property="fpqqlsh"/>
+        <result column="kplsh" jdbcType="VARCHAR" property="kplsh"/>
+        <result column="ddh" jdbcType="VARCHAR" property="ddh"/>
+        <result column="mdh" jdbcType="VARCHAR" property="mdh"/>
+        <result column="ghf_mc" jdbcType="VARCHAR" property="ghfMc"/>
+        <result column="ghf_sj" jdbcType="VARCHAR" property="ghfSj"/>
+        <result column="kphjje" jdbcType="VARCHAR" property="kphjje"/>
+        <result column="hjbhsje" jdbcType="VARCHAR" property="hjbhsje"/>
+        <result column="kpse" jdbcType="VARCHAR" property="kpse"/>
+        <result column="kplx" jdbcType="VARCHAR" property="kplx"/>
+        <result column="kpzt" jdbcType="VARCHAR" property="kpzt"/>
+        <result column="kprq" jdbcType="TIMESTAMP" property="kprq"/>
+        <result column="fpdm" jdbcType="VARCHAR" property="fpdm"/>
+        <result column="fphm" jdbcType="VARCHAR" property="fphm"/>
+        <result column="fpzl_dm" jdbcType="VARCHAR" property="fpzlDm"/>
+        <result column="jym" jdbcType="VARCHAR" property="jym"/>
+        <result column="kpr" jdbcType="VARCHAR" property="kpr"/>
+        <result column="fwm" jdbcType="VARCHAR" property="fwm"/>
+        <result column="ewm" jdbcType="VARCHAR" property="ewm"/>
+        <result column="jqbh" jdbcType="VARCHAR" property="jqbh"/>
+        <result column="pdf_url" jdbcType="VARCHAR" property="pdfUrl"/>
+        <result column="ch_bz" jdbcType="VARCHAR" property="chBz"/>
+        <result column="sykchje" jdbcType="VARCHAR" property="sykchje"/>
+        <result column="chyy" jdbcType="VARCHAR" property="chyy"/>
+        <result column="chsj" jdbcType="TIMESTAMP" property="chsj"/>
+        <result column="sbyy" jdbcType="VARCHAR" property="sbyy"/>
+        <result column="rz_zt" jdbcType="VARCHAR" property="rzZt"/>
+        <result column="sld" jdbcType="VARCHAR" property="sld"/>
+        <result column="zf_bz" jdbcType="VARCHAR" property="zfBz"/>
+        <result column="xhf_mc" property="xhfMc" jdbcType="VARCHAR"/>
+        <result column="xhf_nsrsbh" property="xhfNsrsbh"
+                jdbcType="VARCHAR"/>
+        <result column="sld_mc" property="sldMc" jdbcType="VARCHAR"/>
+        <result column="fjh" property="fjh" jdbcType="VARCHAR"/>
+        <result column="dyzt" jdbcType="VARCHAR" property="dyzt"/>
+        <result column="qd_bz" jdbcType="VARCHAR" property="qdbz"/>
+        <result column="push_status" jdbcType="VARCHAR"
+                property="pushStatus"/>
+        <result column="email_push_status" jdbcType="VARCHAR"
+                property="emailPushStatus"/>
+        <result column="hzxxbbh" jdbcType="VARCHAR" property="hzxxbbh"/>
+        <result column="create_time" jdbcType="TIMESTAMP"
+                property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP"
+                property="updateTime"/>
+    </resultMap>
+
+
+
+    <resultMap id="resultMap" type="HashMap"/>
+    <sql id="Base_Column_List">
+        id,
+        order_info_id,
+        order_process_info_id,
+        fpqqlsh,
+        kplsh,
+        ddh,
+        mdh,
+        ghf_mc,
+        ghf_sj,
+        kphjje,
+        hjbhsje,
+        kpse,
+        kplx,
+        kpzt,
+        kprq,
+        fpdm,
+        fphm,
+        fpzl_dm,
+        jym,
+        kpr,
+        fwm,
+        ewm,
+        jqbh,
+        pdf_url,
+        ch_bz,
+        sykchje,
+        chyy,
+        chsj,
+        sbyy,
+        rz_zt,
+        sld,
+        zf_bz,
+        xhf_nsrsbh,
+        dyzt,
+        sld_mc,
+        fjh,
+        qd_bz,
+        push_status,
+        hzxxbbh,
+        create_time,
+        update_time,
+        xhf_mc
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from order_invoice_info
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert"
+            parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        insert into order_invoice_info (id,
+                                        order_info_id,
+                                        order_process_info_id,
+                                        fpqqlsh,
+                                        kplsh,
+                                        ddh,
+                                        mdh,
+                                        ghf_mc,
+                                        ghf_sj,
+                                        kphjje,
+                                        hjbhsje,
+                                        kpse,
+                                        kplx,
+                                        kpzt,
+                                        kprq,
+                                        fpdm,
+                                        fphm,
+                                        fpzl_dm,
+                                        jym,
+                                        kpr,
+                                        fwm,
+                                        ewm,
+                                        jqbh,
+                                        pdf_url,
+                                        ch_bz,
+                                        sykchje,
+                                        chsj,
+                                        chyy,
+                                        sbyy,
+                                        rz_zt,
+                                        zf_bz,
+                                        xhf_mc,
+                                        xhf_nsrsbh,
+                                        dyzt,
+                                        sld,
+                                        sld_mc,
+                                        fjh,
+                                        qd_bz,
+                                        push_status,
+                                        hzxxbbh,
+                                        create_time,
+                                        update_time)
+        values (#{id,jdbcType=VARCHAR},
+                #{orderInfoId,jdbcType=VARCHAR},
+                #{orderProcessInfoId,jdbcType=VARCHAR},
+                #{fpqqlsh,jdbcType=VARCHAR},
+                #{kplsh,jdbcType=VARCHAR},
+                #{ddh,jdbcType=VARCHAR},
+                #{mdh,jdbcType=VARCHAR},
+                #{ghfMc,jdbcType=VARCHAR},
+                #{ghfSj,jdbcType=VARCHAR},
+                #{kphjje,jdbcType=VARCHAR},
+                #{hjbhsje,jdbcType=VARCHAR},
+                #{kpse,jdbcType=VARCHAR},
+                #{kplx,jdbcType=VARCHAR},
+                #{kpzt,jdbcType=VARCHAR},
+                #{kprq,jdbcType=TIMESTAMP},
+                #{fpdm,jdbcType=VARCHAR},
+                #{fphm,jdbcType=VARCHAR},
+                #{fpzlDm,jdbcType=VARCHAR},
+                #{jym,jdbcType=VARCHAR},
+                #{kpr,jdbcType=VARCHAR},
+                #{fwm,jdbcType=VARCHAR},
+                #{ewm,jdbcType=VARCHAR},
+                #{jqbh,jdbcType=VARCHAR},
+                #{pdfUrl,jdbcType=VARCHAR},
+                #{chBz,jdbcType=VARCHAR},
+                #{sykchje,jdbcType=VARCHAR},
+                #{chsj,jdbcType=TIMESTAMP},
+                #{chyy,jdbcType=VARCHAR},
+                #{sbyy,jdbcType=VARCHAR},
+                #{rzZt,jdbcType=VARCHAR},
+                #{zfBz,jdbcType=VARCHAR},
+                #{xhfMc,jdbcType=VARCHAR},
+                #{xhfNsrsbh,jdbcType=VARCHAR},
+                #{dyzt,jdbcType=VARCHAR},
+                #{sld,jdbcType=VARCHAR},
+                #{sldMc,jdbcType=VARCHAR},
+                #{fjh,jdbcType=VARCHAR},
+                #{qdbz,jdbcType=VARCHAR},
+                #{pushStatus,jdbcType=VARCHAR},
+                #{hzxxbbh,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <update id="updateOrderInvoiceInfoByInvoiceId" parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        update order_invoice_info
+        <set>
+            <if test="orderInfoId != null">
+                order_info_id = #{orderInfoId,jdbcType=VARCHAR},
+            </if>
+            <if test="orderProcessInfoId != null">
+                order_process_info_id =
+                #{orderProcessInfoId,jdbcType=VARCHAR},
+            </if>
+            <if test="fpqqlsh != null">
+                fpqqlsh = #{fpqqlsh,jdbcType=VARCHAR},
+            </if>
+            <if test="kplsh != null">
+                kplsh = #{kplsh,jdbcType=VARCHAR},
+            </if>
+            <if test="ddh != null">
+                ddh = #{ddh,jdbcType=VARCHAR},
+            </if>
+            <if test="mdh != null">
+                mdh = #{mdh,jdbcType=VARCHAR},
+            </if>
+            <if test="ghfMc != null">
+                ghf_mc = #{ghfMc,jdbcType=VARCHAR},
+            </if>
+            <if test="ghfSj != null">
+                ghf_sj = #{ghfSj,jdbcType=VARCHAR},
+            </if>
+            <if test="kphjje != null">
+                kphjje = #{kphjje,jdbcType=VARCHAR},
+            </if>
+            <if test="hjbhsje != null">
+                hjbhsje = #{hjbhsje,jdbcType=VARCHAR},
+            </if>
+            <if test="kpse != null">
+                kpse = #{kpse,jdbcType=VARCHAR},
+            </if>
+            <if test="kplx != null">
+                kplx = #{kplx,jdbcType=VARCHAR},
+            </if>
+            <if test="kpzt != null">
+                kpzt = #{kpzt,jdbcType=VARCHAR},
+            </if>
+            <if test="kprq != null">
+                kprq = #{kprq,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fpdm != null">
+                fpdm = #{fpdm,jdbcType=VARCHAR},
+            </if>
+            <if test="fphm != null">
+                fphm = #{fphm,jdbcType=VARCHAR},
+            </if>
+            <if test="fpzlDm != null">
+                fpzl_dm = #{fpzlDm,jdbcType=VARCHAR},
+            </if>
+            <if test="jym != null">
+                jym = #{jym,jdbcType=VARCHAR},
+            </if>
+            <if test="kpr != null">
+                kpr = #{kpr,jdbcType=VARCHAR},
+            </if>
+            <if test="fwm != null">
+                fwm = #{fwm,jdbcType=VARCHAR},
+            </if>
+            <if test="ewm != null">
+                ewm = #{ewm,jdbcType=VARCHAR},
+            </if>
+            <if test="jqbh != null">
+                jqbh = #{jqbh,jdbcType=VARCHAR},
+            </if>
+            <if test="pdfUrl != null">
+                pdf_url = #{pdfUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="chBz != null">
+                ch_bz = #{chBz,jdbcType=VARCHAR},
+            </if>
+            <if test="sykchje != null">
+                sykchje = #{sykchje,jdbcType=VARCHAR},
+            </if>
+            <if test="chsj != null">
+                chsj = #{chsj,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sbyy != null">
+                sbyy = #{sbyy,jdbcType=VARCHAR},
+            </if>
+            <if test="rzZt != null">
+                rz_zt = #{rzZt,jdbcType=VARCHAR},
+            </if>
+            <if test="zfBz != null">
+                zf_bz = #{zfBz,jdbcType=VARCHAR},
+            </if>
+            <if test="zfyy != null">
+                zfyy = #{zfyy,jdbcType=VARCHAR},
+            </if>
+            <if test="zfsj != null">
+                zfsj = #{zfsj,jdbcType=TIMESTAMP},
+            </if>
+            <if test="xhfMc != null">
+                xhf_mc = #{xhfMc,jdbcType=VARCHAR},
+            </if>
+            <if test="xhfNsrsbh != null">
+                xhf_nsrsbh = #{xhfNsrsbh,jdbcType=VARCHAR},
+            </if>
+            <if test="sld != null">
+                sld = #{sld,jdbcType=VARCHAR},
+            </if>
+            <if test="sldMc != null">
+                sld_mc = #{sldMc,jdbcType=VARCHAR},
+            </if>
+            <if test="fjh != null">
+                fjh = #{fjh,jdbcType=VARCHAR},
+            </if>
+            <if test="qdbz != null">
+                qd_bz = #{qdbz,jdbcType=VARCHAR},
+            </if>
+            <if test="hzxxbbh != null">
+                hzxxbbh = #{hzxxbbh,jdbcType=VARCHAR},
+            </if>
+            <if test="pushStatus != null and pushStatus != ''">
+                push_status = #{pushStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="emailPushStatus != null and emailPushStatus != ''">
+                email_push_status = #{emailPushStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="dyzt != null">
+                dyzt = #{dyzt,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateOrderInvoiceInfoByDdqqlsh"
+            parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        update order_invoice_info
+        <set>
+            <if test="orderInfoId != null">
+                order_info_id = #{orderInfoId,jdbcType=VARCHAR},
+            </if>
+            <if test="orderProcessInfoId != null">
+                order_process_info_id =
+                #{orderProcessInfoId,jdbcType=VARCHAR},
+            </if>
+            <if test="kplsh != null">
+                kplsh = #{kplsh,jdbcType=VARCHAR},
+            </if>
+            <if test="ddh != null">
+                ddh = #{ddh,jdbcType=VARCHAR},
+            </if>
+            <if test="mdh != null">
+                mdh = #{mdh,jdbcType=VARCHAR},
+            </if>
+            <if test="ghfMc != null">
+                ghf_mc = #{ghfMc,jdbcType=VARCHAR},
+            </if>
+            <if test="ghfSj != null">
+                ghf_sj = #{ghfSj,jdbcType=VARCHAR},
+            </if>
+            <if test="kphjje != null">
+                kphjje = #{kphjje,jdbcType=VARCHAR},
+            </if>
+            <if test="hjbhsje != null">
+                hjbhsje = #{hjbhsje,jdbcType=VARCHAR},
+            </if>
+            <if test="kpse != null">
+                kpse = #{kpse,jdbcType=VARCHAR},
+            </if>
+            <if test="kplx != null">
+                kplx = #{kplx,jdbcType=VARCHAR},
+            </if>
+            <if test="kpzt != null">
+                kpzt = #{kpzt,jdbcType=VARCHAR},
+            </if>
+            <if test="kprq != null">
+                kprq = #{kprq,jdbcType=TIMESTAMP},
+            </if>
+            <if test="fpdm != null">
+                fpdm = #{fpdm,jdbcType=VARCHAR},
+            </if>
+            <if test="fphm != null">
+                fphm = #{fphm,jdbcType=VARCHAR},
+            </if>
+            <if test="fpzlDm != null">
+                fpzl_dm = #{fpzlDm,jdbcType=VARCHAR},
+            </if>
+            <if test="jym != null">
+                jym = #{jym,jdbcType=VARCHAR},
+            </if>
+            <if test="kpr != null">
+                kpr = #{kpr,jdbcType=VARCHAR},
+            </if>
+            <if test="fwm != null">
+                fwm = #{fwm,jdbcType=VARCHAR},
+            </if>
+            <if test="ewm != null">
+                ewm = #{ewm,jdbcType=VARCHAR},
+            </if>
+            <if test="jqbh != null">
+                jqbh = #{jqbh,jdbcType=VARCHAR},
+            </if>
+            <if test="pdfUrl != null">
+                pdf_url = #{pdfUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="chBz != null">
+                ch_bz = #{chBz,jdbcType=VARCHAR},
+            </if>
+            <if test="sykchje != null">
+                sykchje = #{sykchje,jdbcType=VARCHAR},
+            </if>
+            <if test="chsj != null">
+                chsj = #{chsj,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sbyy != null">
+                sbyy = #{sbyy,jdbcType=VARCHAR},
+            </if>
+            <if test="rzZt != null">
+                rz_zt = #{rzZt,jdbcType=VARCHAR},
+            </if>
+            <if test="zfBz != null">
+                zf_bz = #{zfBz,jdbcType=VARCHAR},
+            </if>
+            <if test="zfyy != null">
+                zfyy = #{zfyy,jdbcType=VARCHAR},
+            </if>
+            <if test="zfsj != null">
+                zfsj = #{zfsj,jdbcType=TIMESTAMP},
+            </if>
+            <if test="xhfMc != null">
+                xhf_mc = #{xhfMc,jdbcType=VARCHAR},
+            </if>
+            <if test="xhfNsrsbh != null">
+                xhf_nsrsbh = #{xhfNsrsbh,jdbcType=VARCHAR},
+            </if>
+            <if test="sld != null">
+                sld = #{sld,jdbcType=VARCHAR},
+            </if>
+            <if test="sldMc != null">
+                sld_mc = #{sldMc,jdbcType=VARCHAR},
+            </if>
+            <if test="qdbz != null">
+                qd_bz = #{qdbz,jdbcType=VARCHAR},
+            </if>
+            <if test="hzxxbbh != null">
+                hzxxbbh = #{hzxxbbh,jdbcType=VARCHAR},
+            </if>
+            <if test="pushStatus != null and pushStatus != ''">
+                push_status = #{pushStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="emailPushStatus != null and emailPushStatus != ''">
+                email_push_status = #{emailPushStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="dyzt != null">
+                dyzt = #{dyzt,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where fpqqlsh = #{fpqqlsh,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectOrderInvoiceInfoByFpdmAndFphm" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where
+        fpdm = #{fpdm,jdbcType=VARCHAR} and
+        fphm= #{fphm,jdbcType=VARCHAR}
+
+    </select>
+
+    <select id="selectInvoiceByOrder" resultMap="BaseResultMap"
+            parameterType="java.util.Map">
+        <bind name="dataType" value="${dataType}"/>
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where
+        <if test="dataType == 0">
+            <if test="startTime != null">
+                DATE_FORMAT(kprq,'%Y-%m-%d')>=#{startTime,jdbcType=VARCHAR} and
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=VARCHAR}>=DATE_FORMAT(kprq,'%Y-%m-%d') and
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="startTime != null">
+                trunc(create_time)>=to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss') and
+            </if>
+            <if test="endTime != null">
+                to_date(#{endTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')>=trunc(create_time) and
+            </if>
+        </if>
+
+        kpzt ='2'
+        <if test="dyzt != null  and dyzt != ''">
+            and dyzt = #{dyzt,jdbcType=VARCHAR}
+        </if>
+        <if test="fpdm != null  and fpdm != ''">
+            and fpdm = #{fpdm,jdbcType=VARCHAR}
+        </if>
+        <if test="fphm != null and fphm != '' ">
+            and fphm = #{fphm,jdbcType=VARCHAR}
+        </if>
+        <if test="fpzlDm != null and fpzlDm != ''">
+            and fpzl_dm = #{fpzlDm,jdbcType=VARCHAR}
+        </if>
+        <if test="kplx != null and kplx != ''">
+            and kplx = #{kplx,jdbcType=VARCHAR}
+        </if>
+        <if test="fjh != null and fjh != ''">
+            and fjh= #{fjh,jdbcType=VARCHAR}
+        </if>
+        <if test="dataType == 0">
+            <if test="ddh != null and ddh != '' ">
+                and ddh like concat('%', #{ddh,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="mdh != null and mdh != ''">
+                and mdh like concat('%',#{mdh,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="ghfMc != null and ghfMc != '' ">
+                and ghf_mc like concat('%',#{ghfMc,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="ddh != null and ddh != '' ">
+                and ddh like concat(concat('%', #{ddh,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="mdh != null and mdh != ''">
+                and mdh like concat(concat('%',#{mdh,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="ghfMc != null and ghfMc != '' ">
+                and ghf_mc like concat(concat('%',#{ghfMc,jdbcType=VARCHAR}),'%')
+            </if>
+        </if>
+
+        <if test="kpr != null and kpr != '' ">
+            and kpr = #{kpr,jdbcType=VARCHAR}
+        </if>
+        <if test="sld != null and sld != '' ">
+            and sld = #{sld,jdbcType=VARCHAR}
+        </if>
+        <if test="zfbz != null and zfbz != '0'.toString() ">
+            and zf_bz in ('2','3')
+        </if>
+        <if test="zfbz != null and zfbz == '0'.toString()">
+            and zf_bz in ('0','1')
+        </if>
+        <if test="qdbz != null ">
+            and qd_bz in
+            <foreach collection="qdbz" index="index" item="item"
+                     open="(" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="fpzlList != null and fpzlList.size != 0">
+            and fpzl_dm in
+            <foreach collection="fpzlList" index="index" item="fpzl"
+                     open="(" separator="," close=")">
+                #{fpzl,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="fphmStart != null and fphmStart != ''">
+            and fphm >= #{fphmStart,jdbcType=VARCHAR}
+        </if>
+        <if test="fphmEnd != null and fphmEnd != ''">
+            AND
+            #{fphmEnd,jdbcType=VARCHAR}>= fphm
+        </if>
+        <if test="xfsh != null and xfsh != ''">
+            AND xhf_nsrsbh =
+            #{xfsh,jdbcType=VARCHAR}
+        </if>
+        <if test="xhfNsrsbh!= null">
+             and xhf_nsrsbh in
+            <foreach collection="xhfNsrsbh" index="index" item="item"
+                     open="(" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="kplshList != null">
+             and kplsh in
+            <foreach collection="kplshList" index="index" item="item"
+                     open="(" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        
+        <!--
+        order by fpdm desc,fphm desc
+        -->
+        order by kprq desc
+    </select>
+
+    <select id="selectByOrderIdArray" resultMap="BaseResultMap"
+            parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where order_info_id in
+        <foreach collection="orderIdArrays" item="orderId" open="("
+                 close=")" separator=",">
+            #{orderId}
+        </foreach>
+    </select>
+
+    <!-- updateInvoiceStatusByKplsh -->
+    <update id="updateInvoiceStatusByKplsh"
+            parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        update order_invoice_info
+        <set>
+            <if test="chBz != null">
+                ch_bz = #{chBz,jdbcType=VARCHAR},
+            </if>
+            <if test="kpzt != null">
+                kpzt = #{kpzt,jdbcType=VARCHAR},
+            </if>
+            <if test="sbyy != null">
+                sbyy = #{sbyy,jdbcType=VARCHAR},
+            </if>
+            <if test="fpdm != null">
+                fpdm = #{fpdm,jdbcType=VARCHAR},
+            </if>
+            <if test="fphm != null">
+                fphm = #{fphm,jdbcType=VARCHAR},
+            </if>
+            <if test="jym != null">
+                jym = #{jym,jdbcType=VARCHAR},
+            </if>
+            <if test="fwm != null">
+                fwm = #{fwm,jdbcType=VARCHAR},
+            </if>
+            <if test="ewm != null">
+                ewm = #{ewm,jdbcType=VARCHAR},
+            </if>
+            <if test="jqbh != null">
+                jqbh = #{jqbh,jdbcType=VARCHAR},
+            </if>
+            <if test="kprq != null">
+                kprq = #{kprq,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sld != null and sld != '' ">
+                sld = #{sld,jdbcType=VARCHAR},
+            </if>
+            <if test="sldMc != null and sldMc != '' ">
+                sld_mc = #{sldMc,jdbcType=VARCHAR},
+            </if>
+            <if test="fjh != null and fjh != '' ">
+                fjh = #{fjh,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where kplsh = #{kplsh,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByList"
+            parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        UPDATE order_invoice_info
+        <set>
+            <if test="kplsh != null">
+                kplsh = #{kplsh,jdbcType=VARCHAR},
+            </if>
+            <if test="sld != null">
+                sld = #{sld,jdbcType=VARCHAR},
+            </if>
+            <if test="sldMc != null">
+                sld_mc = #{sldMc,jdbcType=VARCHAR},
+            </if>
+            <if test="fjh != null">
+                fjh = #{fjh,jdbcType=VARCHAR},
+            </if>
+            <if test="chBz != null">
+                ch_bz = #{chBz,jdbcType=VARCHAR},
+            </if>
+            <if test="chyy != null">
+                chyy = #{chyy,jdbcType=VARCHAR},
+            </if>
+            <if test="zfBz != null">
+                zf_bz = #{zfBz,jdbcType=VARCHAR},
+            </if>
+            <if test="dyzt != null">
+                dyzt = #{dyzt,jdbcType=VARCHAR},
+            </if>
+            <if test="hzxxbbh != null">
+                hzxxbbh = #{hzxxbbh,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="kpzt != null and kpzt != ''">
+                kpzt = #{kpzt,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <sql id="collect">
+        SELECT oi.ghf_dz,oi.ghf_dh,oi.ghf_yh,oi.ghf_zh,oi.bz,oi.bbm_bbh,
+               oi.xhf_mc      xhfmc,
+               oi.ghf_nsrsbh  ghfNsrsbh,
+               oi.ghf_mc      ghfmc,
+               oi.xhf_dz      xhfDz,
+               oi.xhf_dh      xhfDh,
+               oi.xhf_zh      xhfZh,
+               oi.xhf_yh      xhfYh,
+               oii.ddh,
+               oii.fpdm,
+               oii.fphm,
+               oii.ghf_sj,
+               oii.ghf_mc,
+               oii.pdf_url,
+               oii.qd_bz,
+               oii.id,
+               oii.kprq,
+               oii.hjbhsje,
+               oii.kplx,
+               oii.kphjje,
+               oii.kpse,
+               oii.kpr,
+               oii.zf_bz,
+               oii.fpzl_dm,
+               oii.fpqqlsh,
+               oii.ch_bz,
+               oii.mdh,
+               oii.order_info_id,
+               oii.sld,
+               oii.push_status,
+               oii.kpzt,
+               oii.xhf_nsrsbh xhfNsrsbh,
+               oii.sld_mc     sldmc,
+               opi.ddly,
+               oii.order_process_info_id,
+               opi.ywlx,
+               opi.ywlx_id
+        FROM order_invoice_info oii
+        LEFT JOIN order_info oi ON oii.order_info_id = oi.id
+        LEFT JOIN order_process_info opi ON oii.order_info_id = opi.order_info_id
+    </sql>
+
+    <sql id="invoiceList">
+        SELECT
+        o1.ghf_dz ghfDz,
+        o1.ghf_dh ghfDh,
+        o1.ghf_yh ghfYh,
+        o1.ghf_zh ghfZh,
+        o1.bbm_bbh bmbbbh,
+        o1.fpzl_dm fpzlDm,
+        o1.zf_bz zfbz,
+        o1.qd_bz qdbz,
+        o1.bz,
+        o1.ddh,
+        o1.fpdm,
+        o1.fphm,
+        o1.ghf_mc,
+        o1.ghf_sj,
+        o1.kprq,
+        o1.hjbhsje,
+        o1.kplx,
+        o1.kphjje,
+        o1.kpse,
+        o1.kpr,
+        o1.fpqqlsh,
+        o1.ch_bz,
+        o1.mdh,
+        o1.order_info_id,
+        o1.pdf_url,
+        o1.sld,
+        o1.id,
+        o1.xhfmc,
+        o1.ghfNsrsbh,
+        o1.xhfNsrsbh,
+        o1.sldmc,
+        o1.ddly,
+        o1.push_status,
+        o1.order_process_info_id,
+        o1.xhfDz,
+        o1.xhfDh,
+        o1.xhfZh,
+        o1.xhfYh,
+        o1.ywlx
+        FROM
+        (
+        SELECT oi.ghf_dz,oi.ghf_dh,oi.ghf_yh,oi.ghf_zh,oi.bz,oi.bbm_bbh,
+        oi.xhf_mc      xhfmc,
+        oi.ghf_nsrsbh  ghfNsrsbh,
+        oi.ghf_mc      ghfmc,
+        oi.xhf_dz      xhfDz,
+        oi.xhf_dh      xhfDh,
+        oi.xhf_zh      xhfZh,
+        oi.xhf_yh      xhfYh,
+        oii.ddh,
+        oii.fpdm,
+        oii.fphm,
+        oii.ghf_sj,
+        oii.ghf_mc,
+        oii.pdf_url,
+        oii.qd_bz,
+        oii.id,
+        oii.kprq,
+        oii.hjbhsje,
+        oii.kplx,
+        oii.kphjje,
+        oii.kpse,
+        oii.kpr,
+        oii.zf_bz,
+        oii.fpzl_dm,
+        oii.fpqqlsh,
+        oii.ch_bz,
+        oii.mdh,
+        oii.order_info_id,
+        oii.sld,
+        oii.push_status,
+        oii.kpzt,
+        oii.xhf_nsrsbh xhfNsrsbh,
+        oii.sld_mc     sldmc,
+        opi.ddly,
+        oii.order_process_info_id,
+        opi.ywlx,
+        opi.ywlx_id
+        FROM order_invoice_info oii
+        LEFT JOIN order_info oi ON oii.order_info_id = oi.id
+        LEFT JOIN order_process_info opi ON oii.order_info_id = opi.order_info_id
+
+        where kpzt='2'
+        <if test="ddly != null and ddly.size != 0">
+            and ddly in
+            <foreach collection="ddly" index="index" item="ddlyit"
+                     open="(" separator="," close=")">
+                #{ddlyit,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="qdbz != null">
+            and oii.qd_bz in
+            <foreach collection="qdbz" index="index" item="qdbzit"
+                     open="(" separator="," close=")">
+                #{qdbzit,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="fpdm != null and fpdm != ''">
+            AND fpdm = #{fpdm,jdbcType=VARCHAR}
+        </if>
+        <choose>
+            <when test="fphm != null and fphm !=''">
+                AND fphm = #{fphm,jdbcType=VARCHAR}
+            </when>
+            <otherwise>
+                <if test="fpqh != null and fpqh != ''">
+                    AND fphm >= #{fpqh,jdbcType=VARCHAR}
+                </if>
+                <if test="fpzh != null and fpzh != ''">
+                    AND fphm <![CDATA[<=]]> #{fpzh,jdbcType=VARCHAR}
+                </if>
+            </otherwise>
+        </choose>
+
+        <if test="sld != null and sld !=''">
+            AND sld = #{sld,jdbcType=VARCHAR}
+        </if>
+        <if test="ywlx != null and ywlx !=''">
+            AND opi.ywlx = #{ywlx,jdbcType=VARCHAR}
+        </if>
+        <if test="kplx != null and kplx!=''">
+            AND oii.kplx = #{kplx,jdbcType=VARCHAR}
+        </if>
+        <if test="ddh != null and ddh!=''">
+            AND oii.ddh = #{ddh,jdbcType=VARCHAR}
+        </if>
+        <if test="dataType == 0">
+            <if test="gmfmc != null and gmfmc != ''">
+                AND oii.ghf_mc like concat('%', #{gmfmc,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="gmfmc != null and gmfmc != ''">
+                AND oii.ghf_mc like concat(concat('%', #{gmfmc,jdbcType=VARCHAR}),'%')
+            </if>
+        </if>
+
+        <if test="fplx != null and fplx != '' ">
+            AND oii.fpzl_dm = #{fplx,jdbcType=VARCHAR}
+        </if>
+        <if test="kpr != null and kpr != '' ">
+            AND kpr = #{kpr,jdbcType=VARCHAR}
+        </if>
+        <if test="mdh != null and mdh != '' ">
+            AND mdh = #{mdh,jdbcType=VARCHAR}
+        </if>
+
+        <if test="dataType == 0">
+            <if test="startTime != null and startTime!= '' ">
+                AND kprq >= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime != null and endTime!= '' ">
+                AND #{endTime,jdbcType=TIMESTAMP} >= kprq
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="startTime != null and startTime!= '' ">
+                AND trunc(kprq) &gt;= to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="endTime != null and endTime!= '' ">
+                AND trunc(kprq) &lt;= to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+        </if>
+
+        <if test="orderIdArrays != null">
+            and oii.id in
+            <foreach collection="orderInvocieIdArrays" item="invoiceId"
+                     open="(" close=")" separator=",">
+                #{invoiceId}
+            </foreach>
+        </if>
+        <if test="xhfNsrsbh!= null">
+            and oii.xhf_nsrsbh in
+            <foreach collection="xhfNsrsbh" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="chbz != null">
+            and ch_bz in
+            <foreach collection="chbz" item="item"
+                     open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="tsbz != null and tsbz != ''">
+            and push_status = #{tsbz,jdbcType=VARCHAR}
+        </if>
+        <if test="xfsh!=null and xfsh!= '' ">
+            and oii.xhf_nsrsbh=#{xfsh,jdbcType=VARCHAR}
+        </if>
+        <if test="zfbz!=null and zfbz!= '' ">
+            and zf_bz=#{zfbz,jdbcType=VARCHAR}
+        </if>
+        <if test="xhfmc!=null and xhfmc!= '' ">
+            and oi.xhf_mc=#{xhfmc,jdbcType=VARCHAR}
+        </if>
+        <if test="minhjje!=null and minhjje!= ''  ">
+            and kphjje &gt;= CAST(#{minhjje,jdbcType=VARCHAR} as DECIMAL)
+        </if>
+        <if test="maxhjje!=null and maxhjje!= '' ">
+            and kphjje &lt;= CAST(#{maxhjje,jdbcType=VARCHAR} as DECIMAL)
+        </if>
+
+        ) o1
+
+    </sql>
+
+    <sql id="invoiceListOld">
+        SELECT
+        o1.ghf_dz ghfDz,
+        o1.ghf_dh ghfDh,
+        o1.ghf_yh ghfYh,
+        o1.ghf_zh ghfZh,
+        o1.bbm_bbh bmbbbh,
+        o1.fpzl_dm fpzlDm,
+        o1.zf_bz zfbz,
+        o1.qd_bz qdbz,
+        o1.bz,
+        o1.ddh,
+        o1.fpdm,
+        o1.fphm,
+        o1.ghf_mc,
+        o1.ghf_sj,
+        o1.kprq,
+        o1.hjbhsje,
+        o1.kplx,
+        o1.kphjje,
+        o1.kpse,
+        o1.kpr,
+        o1.fpqqlsh,
+        o1.ch_bz,
+        o1.mdh,
+        o1.order_info_id,
+        o1.pdf_url,
+        o1.sld,
+        o1.id,
+        o1.xhfmc,
+        o1.ghfNsrsbh,
+        o1.xhfNsrsbh,
+        o1.sldmc,
+        o1.ddly,
+        o1.push_status,
+        o1.order_process_info_id,
+        o1.xhfDz,
+        o1.xhfDh,
+        o1.xhfZh,
+        o1.xhfYh,
+        o1.ywlx
+        FROM
+        (
+        <include refid="com.dxhy.order.dao.OrderInvoiceInfoMapper.collect"/>
+        ) o1
+        where kpzt='2'
+        <if test="ddly != null and ddly.size != 0">
+            and o1.ddly in
+            <foreach collection="ddly" index="index" item="ddlyit"
+                     open="(" separator="," close=")">
+                #{ddlyit,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="qdbz != null">
+            and o1.qd_bz in
+            <foreach collection="qdbz" index="index" item="qdbzit"
+                     open="(" separator="," close=")">
+                #{qdbzit,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        <if test="fpdm != null and fpdm != ''">
+            AND o1.fpdm = #{fpdm,jdbcType=VARCHAR}
+        </if>
+        <choose>
+            <when test="fphm != null and fphm !=''">
+                AND o1.fphm = #{fphm,jdbcType=VARCHAR}
+            </when>
+            <otherwise>
+                <if test="fpqh != null and fpqh != ''">
+                    AND o1.fphm >= #{fpqh,jdbcType=VARCHAR}
+                </if>
+                <if test="fpzh != null and fpzh != ''">
+                    AND o1.fphm <![CDATA[<=]]> #{fpzh,jdbcType=VARCHAR}
+                </if>
+            </otherwise>
+        </choose>
+
+        <if test="sld != null and sld !=''">
+            AND o1.sld = #{sld,jdbcType=VARCHAR}
+        </if>
+        <if test="ywlx != null and ywlx !=''">
+            AND o1.ywlx = #{ywlx,jdbcType=VARCHAR}
+        </if>
+        <if test="kplx != null and kplx!=''">
+            AND o1.kplx = #{kplx,jdbcType=VARCHAR}
+        </if>
+        <if test="ddh != null and ddh!=''">
+            AND o1.ddh = #{ddh,jdbcType=VARCHAR}
+        </if>
+        <if test="dataType == 0">
+            <if test="gmfmc != null and gmfmc != ''">
+                AND o1.ghf_mc like concat('%', #{gmfmc,jdbcType=VARCHAR},'%')
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="gmfmc != null and gmfmc != ''">
+                AND o1.ghf_mc like concat(concat('%', #{gmfmc,jdbcType=VARCHAR}),'%')
+            </if>
+        </if>
+
+        <if test="fplx != null and fplx != '' ">
+            AND o1.fpzl_dm = #{fplx,jdbcType=VARCHAR}
+        </if>
+        <if test="kpr != null and kpr != '' ">
+            AND o1.kpr = #{kpr,jdbcType=VARCHAR}
+        </if>
+        <if test="mdh != null and mdh != '' ">
+            AND o1.mdh = #{mdh,jdbcType=VARCHAR}
+        </if>
+
+        <if test="dataType == 0">
+            <if test="startTime != null and startTime!= '' ">
+                AND o1.kprq >= #{startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime != null and endTime!= '' ">
+                AND #{endTime,jdbcType=TIMESTAMP} >= o1.kprq
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="startTime != null and startTime!= '' ">
+                AND trunc(o1.kprq) &gt;= to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="endTime != null and endTime!= '' ">
+                AND trunc(o1.kprq) &lt;= to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+        </if>
+
+        <if test="orderIdArrays != null">
+            and o1.id in
+            <foreach collection="orderInvocieIdArrays" item="invoiceId"
+                     open="(" close=")" separator=",">
+                #{invoiceId}
+            </foreach>
+        </if>
+        <if test="xhfNsrsbh!= null">
+            and o1.xhfNsrsbh in
+            <foreach collection="xhfNsrsbh" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="chbz != null">
+            and o1.ch_bz in
+            <foreach collection="chbz" item="item"
+                     open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="tsbz != null and tsbz != ''">
+            and o1.push_status = #{tsbz,jdbcType=VARCHAR}
+        </if>
+        <if test="xfsh!=null and xfsh!= '' ">
+            and o1.xhfNsrsbh=#{xfsh,jdbcType=VARCHAR}
+        </if>
+        <if test="zfbz!=null and zfbz!= '' ">
+            and o1.zf_bz=#{zfbz,jdbcType=VARCHAR}
+        </if>
+        <if test="xhfmc!=null and xhfmc!= '' ">
+            and o1.xhfmc=#{xhfmc,jdbcType=VARCHAR}
+        </if>
+        <if test="minhjje!=null and minhjje!= ''  ">
+            and o1.kphjje &gt;= CAST(#{minhjje,jdbcType=VARCHAR} as DECIMAL)
+        </if>
+        <if test="maxhjje!=null and maxhjje!= '' ">
+            and o1.kphjje &lt;= CAST(#{maxhjje,jdbcType=VARCHAR} as DECIMAL)
+        </if>
+    </sql>
+
+
+    <select id="queryCountByMap" resultType="hashMap"
+            parameterType="java.util.Map">
+        <bind name="dataType" value="${dataType}"/>
+        SELECT
+        count(0) totalcount,
+        sum(CAST(hjbhsje AS DECIMAL(18,2))) totalhjbhsje,
+        sum(CAST(kphjje AS DECIMAL(18,2))) totalkphjje,
+        sum(CAST(kpse AS DECIMAL(18,2))) totalkpse
+        FROM
+        (
+
+        <include refid="invoiceList"/>
+        ) temp
+    </select>
+
+    <!-- selectInvoiceInfoByKplsh -->
+    <select id="selectInvoiceInfoByKplsh" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where kplsh = #{fpqqlsh,jdbcType=VARCHAR}
+    </select>
+
+    <!-- selectOrderInvoiceInfoByFpqqlsh -->
+    <select id="selectOrderInvoiceInfoByFpqqlsh" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where fpqqlsh = #{fpqqlsh,jdbcType=VARCHAR}
+    </select>
+
+    <!-- selectInvoiceInfoByOrderId -->
+    <select id="selectInvoiceInfoByOrderId"
+            resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where order_info_id = #{orderId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectInvoiceInfoByPushStatus"
+            resultMap="BaseResultMap" parameterType="java.lang.String">
+        <bind name="dataType" value="${dataType}"/>
+
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where 1=1
+        <if test="paramMap != null and paramMap.kpztList != null ">
+            and kpzt in
+            <foreach collection="paramMap.kpztList" item="kpzt" open="(" close=")"
+                     separator=",">
+                #{kpzt}
+            </foreach>
+        </if>
+
+        <if test="paramMap != null and paramMap.pushStatusList != null ">
+            and push_status in
+            <foreach collection="paramMap.pushStatusList" item="pushStatus" open="(" close=")"
+                     separator=",">
+                #{pushStatus}
+            </foreach>
+        </if>
+
+        <if test="dataType == 0">
+            <if test="paramMap != null and paramMap.startTime != null and paramMap.startTime != ''">
+                and kprq >= #{paramMap.startTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="paramMap != null and paramMap.endTime != null and paramMap.endTime != ''">
+                and kprq <![CDATA[<= #{paramMap.endTime,jdbcType=TIMESTAMP}]]>
+            </if>
+        </if>
+        <if test="dataType == 1">
+            <if test="paramMap != null and paramMap.startTime != null and paramMap.startTime != ''">
+                and kprq >= to_date(#{paramMap.startTime,jdbcType=TIMESTAMP},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="paramMap != null and paramMap.endTime != null and paramMap.endTime != ''">
+                and kprq &lt; to_date(#{paramMap.endTime,jdbcType=TIMESTAMP},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+        </if>
+
+        <if test="paramMap != null and paramMap.kplsh != null and paramMap.kplsh != ''">
+            and kplsh = #{paramMap.kplsh,jdbcType=VARCHAR}
+        </if>
+        <if test="paramMap != null and paramMap.ddh != null and paramMap.ddh != ''">
+            and ddh = #{paramMap.ddh,jdbcType=VARCHAR}
+        </if>
+        <if test="paramMap != null and paramMap.fpqqlsh != null and paramMap.fpqqlsh != ''">
+            and fpqqlsh = #{paramMap.fpqqlsh,jdbcType=VARCHAR}
+        </if>
+        <if test="paramMap != null and paramMap.fpqqlshs != null ">
+            and fpqqlsh in
+            <foreach collection="paramMap.fpqqlshs" item="fpqqlsh"
+                     open="(" close=")" separator=",">
+                #{fpqqlsh}
+            </foreach>
+        </if>
+        <if test="paramMap != null and paramMap.nsrsbh != null and paramMap.nsrsbh != ''">
+            and xhf_nsrsbh = #{paramMap.nsrsbh,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <select id="selectInvoiceInfoByEmailPushStatus"
+            resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where kpzt in
+        <foreach collection="kpztList" item="kpzt" open="(" close=")"
+                 separator=",">
+            #{kpzt}
+        </foreach>
+        <if test="emailPushStatus != null">
+            where email_push_status in
+            <foreach collection="emailPushStatus" item="status" open="(" close=")"
+                     separator=",">
+                #{status}
+            </foreach>
+        </if>
+        <if test="date != null">
+            and create_time <![CDATA[ < ]]> #{date,jdbcType=TIMESTAMP}
+        </if>
+        <if test="fpzldm != null and fpzldm != ''">
+            and fpzl_dm = #{fpzldm,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <!--selectOrderInvoiceInfoId -->
+    <select id="selectOrderInvoiceInfoId"
+            resultMap ="BaseResultMap"
+            parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        order_invoice_info
+        <where>
+        <if test="fpdm != null and fpdm != ''">
+            and fpdm = #{fpdm,jdbcType=VARCHAR}
+        </if>
+        <if test="fphm != null and fphm != ''">
+            and fphm= #{fphm,jdbcType=VARCHAR}
+        </if>
+        <if test="orderProcessInfoId != null and orderProcessInfoId != ''">
+            and order_process_info_id = #{orderProcessInfoId,jdbcType=VARCHAR}
+        </if>
+        <if test="orderInfoId != null and orderInfoId != ''">
+            and order_info_id = #{orderInfoId,jdbcType=VARCHAR}
+        </if>
+        <if test="kplsh != null and kplsh != ''">
+            and kplsh = #{kplsh,jdbcType=VARCHAR}
+        </if>
+        </where>
+    </select>
+
+    <select id="selectOrderInvoiceInfoByFpdmFphmAndNsrsbh" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where
+        fpdm = #{fpdm,jdbcType=VARCHAR} and
+        fphm= #{fphm,jdbcType=VARCHAR}
+
+        <if test="nsrsbh != null and nsrsbh.size() == 1">
+            and xhf_nsrsbh =
+            <foreach collection="xhfNsrsbh" index="index" item="item">
+                #{item}
+            </foreach>
+        </if>
+        <if test="nsrsbh != null and nsrsbh.size() > 1">
+            and xhf_nsrsbh in
+            <foreach collection="xhfNsrsbh" index="index" item="item"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+    <!--activex 专用 打印机测试-->
+    <select id="getPrintTestInfo" parameterType="java.lang.String" resultType="java.util.HashMap">
+        select t.fpdm,t.fphm,t.fpzl_dm fpzldm,t.xhf_nsrsbh nsrsbh,t.fjh,t.sld,t.jqbh,
+        case when t.qd_bz = '0' then '1'
+        when t.qd_bz = '1' then '0' end  dylx
+        from order_invoice_info t where 1=1
+        <if test="xhfNsrsbh != null and xhfNsrsbh != ''">
+            and t.xhf_nsrsbh = #{xhfNsrsbh,jdbcType=VARCHAR}
+        </if>
+        and t.fpzl_dm
+        in
+        <foreach collection="fpzldms" item="fpzldm" open="(" close=")"
+                 separator=",">
+            #{fpzldm}
+        </foreach>
+        and rownum = 1
+    </select>
+    <select id="selectByHzxxbbh" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from order_invoice_info
+        where hzxxbbh = #{hzxxbbh,jdbcType=VARCHAR}
+    </select>
+
+
+    <!--selectOrderInvoiceInfoId -->
+    <select id="selectOrderInvoiceInfo"
+            resultMap="BaseResultMap"
+            parameterType="com.dxhy.order.model.OrderInvoiceInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        order_invoice_info
+        <where>
+            <if test="orderInvoiceInfo.id != null and orderInvoiceInfo.id != ''">
+                and id = #{orderInvoiceInfo.id,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.fpqqlsh != null and orderInvoiceInfo.fpqqlsh != ''">
+                and fpqqlsh = #{orderInvoiceInfo.fpqqlsh,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.orderProcessInfoId != null and orderInvoiceInfo.orderProcessInfoId != ''">
+                and order_process_info_id = #{orderInvoiceInfo.orderProcessInfoId,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.orderInfoId != null and orderInvoiceInfo.orderInfoId != ''">
+                and order_info_id = #{orderInvoiceInfo.orderInfoId,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.fpdm != null and orderInvoiceInfo.fpdm != ''">
+                and fpdm = #{orderInvoiceInfo.fpdm,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.fphm != null and orderInvoiceInfo.fphm != ''">
+                and fphm = #{orderInvoiceInfo.fphm,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.kplsh != null and orderInvoiceInfo.kplsh != ''">
+                and kplsh = #{orderInvoiceInfo.kplsh,jdbcType=VARCHAR}
+            </if>
+            <if test="orderInvoiceInfo.hzxxbbh != null and orderInvoiceInfo.hzxxbbh != ''">
+                and hzxxbbh = #{orderInvoiceInfo.hzxxbbh,jdbcType=VARCHAR}
+            </if>
+            <if test="shList != null and shList.size() == 0">
+                and xhf_nsrsbh = ''
+            </if>
+            <if test="shList != null and shList.size() == 1">
+                and xhf_nsrsbh =
+                <foreach collection="shList" index="index" item="item">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="shList != null and shList.size() > 1">
+                and xhf_nsrsbh in
+                <foreach collection="shList" index="index" item="item"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+</mapper>
