@@ -45,6 +45,15 @@ public class OrderController {
     @Autowired
     private ApiOrderInvoiceInfoService orderInvoiceInfoService;
 
+    @GetMapping("/hello")
+    @ResponseBody
+    public Map<String,Object> hello(String code){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("he", "一");
+        map.put("ha", "二");
+        System.out.println(code);
+        return map;
+    }
 
     @GetMapping("/page")
     public ModelAndView page(ModelAndView model){
