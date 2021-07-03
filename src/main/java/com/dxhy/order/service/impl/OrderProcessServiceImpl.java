@@ -2,8 +2,10 @@ package com.dxhy.order.service.impl;
 
 
 import com.dxhy.order.dao.OrderProcessInfoMapper;
+import com.dxhy.order.dao.TaxEquipmentInfoMapper;
 import com.dxhy.order.model.OrderInfo;
 import com.dxhy.order.model.OrderProcessInfo;
+import com.dxhy.order.model.TaxEquipmentInfo;
 import com.dxhy.order.service.ApiOrderProcessService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +23,9 @@ public class OrderProcessServiceImpl implements ApiOrderProcessService {
 
     @Autowired
     private OrderProcessInfoMapper orderProcessInfoMapper;
+
+    @Autowired
+    private TaxEquipmentInfoMapper taxEquipmentInfoMapper;
 
 
     @Override
@@ -93,7 +99,7 @@ public class OrderProcessServiceImpl implements ApiOrderProcessService {
      * @return
      */
     @Override
-    public List<OrderProcessInfo> selectOrderProcessByFpqqlshDdhNsrsbh(String xsfNsrsbh, String ddh, String fpqqlsh) {
+    public List<LinkedHashMap> selectOrderProcessByFpqqlshDdhNsrsbh(String xsfNsrsbh, String ddh, String fpqqlsh) {
         return orderProcessInfoMapper.selectOrderProcessByFpqqlshDdhNsrsbh(xsfNsrsbh, ddh, fpqqlsh);
     }
 
@@ -112,6 +118,46 @@ public class OrderProcessServiceImpl implements ApiOrderProcessService {
     @Override
     public OrderProcessInfo selectByOrderId(String orderId) {
         return orderProcessInfoMapper.selectByOrderId(orderId);
+    }
+
+    @Override
+    public List<Map> selectHangXininfo(String s) {
+        return orderProcessInfoMapper.selectHangXininfo(s);
+    }
+
+    @Override
+    public TaxEquipmentInfo selectTaxByNsrsbh(String xhfNsrsbh) {
+        return taxEquipmentInfoMapper.selectTaxByNsrsbh(xhfNsrsbh);
+    }
+
+    @Override
+    public List<LinkedHashMap> selectC48FpkjLogList(String c48DbName, String kplsh) {
+        return orderProcessInfoMapper.selectC48FpkjLogList(c48DbName,kplsh);
+    }
+
+    @Override
+    public List<LinkedHashMap> selectC48FpkjXxList(String c48DbName, String kplsh) {
+        return orderProcessInfoMapper.selectC48FpkjXxList(c48DbName,kplsh);
+    }
+
+    @Override
+    public List<LinkedHashMap> selectbwFpkjLogList(String bwDbName, String kplsh) {
+        return orderProcessInfoMapper.selectbwFpkjLogList(bwDbName,kplsh);
+    }
+
+    @Override
+    public List<LinkedHashMap> selectbwFpkjXxList(String bwDbName, String kplsh) {
+        return orderProcessInfoMapper.selectbwFpkjXxList(bwDbName,kplsh);
+    }
+
+    @Override
+    public List<LinkedHashMap> selectA9FpkjLogList(String a9DbName, String kplsh) {
+        return orderProcessInfoMapper.selectA9FpkjLogList(a9DbName,kplsh);
+    }
+
+    @Override
+    public List<LinkedHashMap> selectA9FpkjXxList(String a9DbName, String kplsh) {
+        return orderProcessInfoMapper.selectA9FpkjXxList(a9DbName,kplsh);
     }
 
 

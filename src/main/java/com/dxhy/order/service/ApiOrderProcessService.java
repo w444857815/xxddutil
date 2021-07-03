@@ -2,7 +2,9 @@ package com.dxhy.order.service;
 
 import com.dxhy.order.model.OrderInfo;
 import com.dxhy.order.model.OrderProcessInfo;
+import com.dxhy.order.model.TaxEquipmentInfo;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public interface ApiOrderProcessService {
      * @return
      */
     OrderProcessInfo selectOrderProcessInfoByProcessId(String id);
-    
+
     /**
      * 根据发票请求流水号获取发票处理表数据
      *
@@ -41,7 +43,7 @@ public interface ApiOrderProcessService {
      * @return
      */
     OrderProcessInfo queryOrderProcessInfoByFpqqlsh(String fpqqlsh);
-    
+
     /**
      * 根据订单请求批次号获取发票处理表数据
      *
@@ -49,7 +51,7 @@ public interface ApiOrderProcessService {
      * @return
      */
     List<OrderProcessInfo> selectOrderProcessInfoByDdqqpch(String ddqqpch);
-    
+
 
     /**
      * 更新orderprocessInfo表
@@ -84,13 +86,13 @@ public interface ApiOrderProcessService {
      * @param fpqqlsh
      * @return
      */
-    List<OrderProcessInfo> selectOrderProcessByFpqqlshDdhNsrsbh(String xsfNsrsbh, String ddh, String fpqqlsh);
+    List<LinkedHashMap> selectOrderProcessByFpqqlshDdhNsrsbh(String xsfNsrsbh, String ddh, String fpqqlsh);
 
     /**
      * 根据orderProcessId查询最终的子订单
      */
     List<OrderProcessInfo> findChildList(String processId);
-    
+
     /**
      * 编辑购方信息,更新
      *
@@ -98,7 +100,7 @@ public interface ApiOrderProcessService {
      * @return
      */
     int updateOrderProcessInfo(OrderInfo orderInfo);
-    
+
 
 
     /**
@@ -111,4 +113,20 @@ public interface ApiOrderProcessService {
     Map<String, Object> selectYwlxCountTotal(Map<String, Object> paramMap);
 
     OrderProcessInfo selectByOrderId(String orderId);
+
+    List<Map> selectHangXininfo(String s);
+
+    TaxEquipmentInfo selectTaxByNsrsbh(String xhfNsrsbh);
+
+    List<LinkedHashMap> selectC48FpkjLogList(String c48DbName, String kplsh);
+
+    List<LinkedHashMap> selectC48FpkjXxList(String c48DbName, String kplsh);
+
+    List<LinkedHashMap> selectbwFpkjLogList(String c48DbName, String kplsh);
+
+    List<LinkedHashMap> selectbwFpkjXxList(String c48DbName, String kplsh);
+
+    List<LinkedHashMap> selectA9FpkjLogList(String c48DbName, String kplsh);
+
+    List<LinkedHashMap> selectA9FpkjXxList(String c48DbName, String kplsh);
 }

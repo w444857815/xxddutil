@@ -1,15 +1,16 @@
 package com.dxhy.order.controller;
 
-import com.dxhy.order.model.OrderInfo;
-import com.dxhy.order.model.OrderInvoiceInfo;
-import com.dxhy.order.model.OrderItemInfo;
-import com.dxhy.order.model.OrderProcessInfo;
+import com.dxhy.order.model.*;
 import com.dxhy.order.service.ApiOrderInfoService;
 import com.dxhy.order.service.ApiOrderInvoiceInfoService;
 import com.dxhy.order.service.ApiOrderItemInfoService;
 import com.dxhy.order.service.ApiOrderProcessService;
+import com.dxhy.order.util.sql;
+import io.github.yedaxia.apidocs.Docs;
+import io.github.yedaxia.apidocs.DocsConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -45,14 +46,33 @@ public class OrderController {
     @Autowired
     private ApiOrderInvoiceInfoService orderInvoiceInfoService;
 
+    @Value("${databaseName.c48}")
+    private String c48DbName;
+
+    @Value("${databaseName.bw}")
+    private String bwDbName;
+
+    @Value("${databaseName.a9}")
+    private String a9DbName;
+
     @GetMapping("/hello")
     @ResponseBody
     public Map<String,Object> hello(String code){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("he", "一");
         map.put("ha", "二");
+        map.put("hei", "三");
+        map.put("hehe", "四");
+        map.put("aaa", "44444");
+        map.put("bbb", "55");
         System.out.println(code);
         return map;
+    }
+
+    @GetMapping("/yunxing")
+    @ResponseBody
+    public void yunxing(String code){
+        new sql().setVisible(true);
     }
 
     @GetMapping("/page")
@@ -214,6 +234,165 @@ public class OrderController {
     }
 
 
+    @GetMapping("/kkinfoPage")
+    public ModelAndView kkinfoPage(ModelAndView model){
+        model.setViewName("kkinfoPage");
+        return model;
+    }
+
+    public static void main(String[] args) {
+        DocsConfig config = new DocsConfig();
+        config.setProjectPath("E:\\workspace\\xxddutil"); // 项目根目录
+        config.setProjectName("xxddutil"); // 项目名称
+        config.setApiVersion("V1.0");       // 声明该API的版本
+        config.setDocsPath("E:\\"); // 生成API 文档所在目录
+        config.setAutoGenerate(Boolean.TRUE);  // 配置自动生成
+        Docs.buildHtmlDocs(config); // 执行生成文档
+    }
+
+    /**
+    * @Description 获取跨库信息
+    * @Return org.springframework.web.servlet.ModelAndView
+    * @Author wangruwei
+    * @Date 2021/2/5 11:17
+    **/
+    @PostMapping("/getKkinfo")
+    @ResponseBody
+    public Map<String, Object> getKkinfo(String ddh, String fpqqlsh){
+        Map<String,Object> csmap = new HashMap<String,Object>();
+        csmap.put("ddh", ddh.trim());
+        csmap.put("fpqqlsh", fpqqlsh.trim());
+        if(StringUtils.isEmpty(ddh)&&StringUtils.isEmpty(fpqqlsh)){
+            return getFailRtn("ddh或fpqqlsh至少输入一个");
+        }
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        List<LinkedHashMap> opiList = orderProcessService.selectOrderProcessByFpqqlshDdhNsrsbh(null, ddh, fpqqlsh);
+        //返回的code  1 ，opi查到多条或0条数据，让确认
+        if(opiList.size()==0){
+            return getSussRtn(null, "没找到opi的数据","99");
+        }
+        if(opiList.size()>1){
+            resultMap.put("opiData", getTitleDataList(opiList.get(0),opiList));
+            return getSussRtn(resultMap, "opi的数据","1");
+        }
+        List<LinkedHashMap> oiiList =  orderInvoiceInfoService.selectOrderProcessByFpqqlshDdh(ddh, fpqqlsh);
+        //返回的code  2 ，oii查到多条或0条数据，让确认
+        if(oiiList.size()==0){
+            return getSussRtn(null, "没找到oii的数据","99");
+        }
+        if(oiiList.size()>1){
+            resultMap.put("oiiData", getTitleDataList(oiiList.get(0),oiiList));
+            return getSussRtn(resultMap, "oii的数据","2");
+        }
+
+
+        String kplsh = oiiList.get(0).get("kplsh").toString();
+
+        System.out.println("和hfhkasfh");
+
+        TaxEquipmentInfo tSksb = orderProcessService.selectTaxByNsrsbh(opiList.get(0).get("xhf_nsrsbh").toString());
+
+
+        /**
+         * @Description 查税控库里的数据
+         * @param ddh
+         * @param fpqqlsh
+         **/
+        //C48
+        List<LinkedHashMap> loglist = new ArrayList<>();
+        List<LinkedHashMap> xxlist =  new ArrayList<>();
+        if("001".equals(tSksb.getSksbCode())){
+            loglist = orderProcessService.selectC48FpkjLogList(c48DbName,kplsh);
+            xxlist = orderProcessService.selectC48FpkjXxList(c48DbName,kplsh);
+
+//            resultMap.put("kjlogList", loglist);
+//            resultMap.put("kjList", xxlist);
+            resultMap.put("invoiceType", "C48");
+        }else if("004".equals(tSksb.getSksbCode())){
+            //百旺
+            loglist = orderProcessService.selectbwFpkjLogList(bwDbName,kplsh);
+            xxlist = orderProcessService.selectbwFpkjXxList(bwDbName,kplsh);
+
+//            resultMap.put("kjlogList", loglist);
+//            resultMap.put("kjList", xxlist);
+            resultMap.put("invoiceType", "百旺盘阵");
+        }
+        //A9
+        else if("002".equals(tSksb.getSksbCode())){
+            loglist = orderProcessService.selectA9FpkjLogList(a9DbName,kplsh);
+            xxlist = orderProcessService.selectA9FpkjXxList(a9DbName,kplsh);
+
+//            resultMap.put("kjlogList", loglist);
+//            resultMap.put("kjList", xxlist);
+            resultMap.put("invoiceType", "A9");
+        }
+
+
+
+
+        resultMap.put("opi", getTitleDataList(opiList.get(0)));
+        LinkedHashMap oii = oiiList.get(0);
+        oii.remove("ewm");
+        resultMap.put("oii", getTitleDataList(oii));
+
+        resultMap.put("kjlog", getTitleDataList(loglist.get(0)));
+        LinkedHashMap kjxx = xxlist.get(0);
+        kjxx.remove("ewm");
+        kjxx.remove("szqm");
+        resultMap.put("kjxx", getTitleDataList(kjxx));
+
+
+        return getSussRtn(resultMap, "获取成功");
+    }
+
+
+
+    private Map<String,Object> getTitleDataList(LinkedHashMap linkedHashMap) {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        List<String> titleList = new LinkedList<>();
+        List<String> dataList = new LinkedList<>();
+
+        LinkedHashMap<String,Object> title = linkedHashMap;
+        Iterator it = title.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry entity = (Map.Entry) it.next();
+            System.out.println(entity);
+            titleList.add(entity.getKey().toString());
+            dataList.add(linkedHashMap.get(entity.getKey().toString())+"");
+        }
+        resultMap.put("title", titleList);
+        resultMap.put("data", dataList);
+        return resultMap;
+    }
+
+
+    private Map<String,Object> getTitleDataList(LinkedHashMap linkedHashMap, List<LinkedHashMap> opiList) {
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        List<String> titleList = new LinkedList<>();
+
+
+        LinkedHashMap<String,Object> title = linkedHashMap;
+        Iterator it = title.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry entity = (Map.Entry) it.next();
+            System.out.println(entity);
+            titleList.add(entity.getKey().toString());
+//            dataList.add(linkedHashMap.get(entity.getKey().toString())+"");
+        }
+        List<List<String>> allDataList = new LinkedList<>();
+        for (int j = 0; j < opiList.size() ; j++) {
+            List<String> dataList = new LinkedList<>();
+            for (int i = 0; i < titleList.size(); i++) {
+                dataList.add(opiList.get(j).get(titleList.get(i).toString())+"");
+            }
+            allDataList.add(dataList);
+        }
+        resultMap.put("title", titleList);
+        resultMap.put("data", allDataList);
+        return resultMap;
+    }
+
+
     protected Map<String, Object> getFailRtn(String msg) {
         Map<String, Object> rtn = new HashMap<String, Object>();
         rtn.put("code", failCode);
@@ -232,6 +411,21 @@ public class OrderController {
     protected Map<String, Object> getSussRtn(Object data, String msg) {
         Map<String, Object> rtn = new HashMap<String, Object>();
         rtn.put("code", sucCode);
+        rtn.put("msg", msg);
+        rtn.put("data", data);
+        return rtn;
+    }
+
+    /**
+     * 获取成功的返回内容
+     *
+     * @param data
+     * @author chenrui
+     * @return
+     */
+    protected Map<String, Object> getSussRtn(Object data, String msg,String code) {
+        Map<String, Object> rtn = new HashMap<String, Object>();
+        rtn.put("code", code);
         rtn.put("msg", msg);
         rtn.put("data", data);
         return rtn;

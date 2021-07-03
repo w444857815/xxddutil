@@ -51,5 +51,10 @@ public class OrderInvoiceInfoServiceImpl implements ApiOrderInvoiceInfoService {
         }
         return i;
     }
+
+    @Override
+    public List<LinkedHashMap> selectOrderProcessByFpqqlshDdh(String ddh, String fpqqlsh) {
+        return orderInvoiceInfoMapper.selectOrderProcessByFpqqlshDdh(ddh,fpqqlsh);
+    }
 }
 

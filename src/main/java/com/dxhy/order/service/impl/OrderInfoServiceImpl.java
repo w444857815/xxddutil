@@ -4,12 +4,15 @@ package com.dxhy.order.service.impl;
 import com.dxhy.order.service.ApiOrderInfoService;
 import com.dxhy.order.dao.OrderInfoMapper;
 import com.dxhy.order.model.OrderInfo;
+import com.dxhy.order.util.PageUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * @author ：杨士勇
@@ -17,6 +20,7 @@ import java.util.TreeMap;
  * @Description ：订单信息实现类
  * @date ：2018年7月21日 下午5:53:27
  */
+@Slf4j
 @Service
 public class OrderInfoServiceImpl implements ApiOrderInfoService {
 
@@ -53,5 +57,11 @@ public class OrderInfoServiceImpl implements ApiOrderInfoService {
     @Override
     public int executeUpdateSql(String sqlStr) {
         return orderInfoMapper.executeUpdateSql(sqlStr);
+    }
+
+    @Override
+    public PageUtils selectOrderInfo(String seaStr, String pageSize, String currPage) {
+
+        return null;
     }
 }

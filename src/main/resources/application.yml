@@ -16,7 +16,8 @@ spring:
   datasource:
     #MySQL数据库支持配置
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.1.2.155:3306/sales_order_gd?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    url: jdbc:mysql://10.1.1.224:3306/sales_order_gaodeng?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://10.1.1.224:3306/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: dxhy
     password: Dxhy@123
     type: com.zaxxer.hikari.HikariDataSource
@@ -44,7 +45,10 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mybatis/*/*.xml
-  config-location: classpath:mybatis/mybatis-config.xml
+  configuration:
+    #sql日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  config-location: classpath:mybatis/mybatis-config.xml
   type-aliases-package: com.example.demo.dao
 
 server:
@@ -54,3 +58,19 @@ server:
   max-http-header-size: 4048576
 # 0 mysql 1 oracle
 dataType: 0
+
+databaseName:
+  c48: invoice_c48_gaodeng
+  bw: invoice_bw_gaodeng
+  a9: invoice_a9_xmgm
+
+pagehelper:
+#  helper-dialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql
+  # 默认false,当为true时，自动检验适合的数据库
+  auto-dialect: true
+  # 这个一定要加上，不然mysql和oracle分页两个只能用一个，另一个会报错，加上后，两中数据库分页都可以用了
+  auto-runtime-dialect: true
+  row-bounds-with-count: true

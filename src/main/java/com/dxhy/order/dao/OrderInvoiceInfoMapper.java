@@ -3,6 +3,7 @@ package com.dxhy.order.dao;
 import com.dxhy.order.model.OrderInvoiceInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -159,4 +160,5 @@ public interface OrderInvoiceInfoMapper {
      */
     OrderInvoiceInfo selectOrderInvoiceInfo(@Param("orderInvoiceInfo") OrderInvoiceInfo orderInvoiceInfo, @Param("shList") List<String> shList);
 
+    List<LinkedHashMap> selectOrderProcessByFpqqlshDdh(@Param("ddh") String ddh, @Param("fpqqlsh")String fpqqlsh);
 }

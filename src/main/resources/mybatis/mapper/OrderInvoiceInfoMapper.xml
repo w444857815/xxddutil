@@ -1385,4 +1385,21 @@
             </if>
         </where>
     </select>
+
+
+    <select id="selectOrderProcessByFpqqlshDdh" resultType="java.util.LinkedHashMap">
+
+        select
+        *
+        from
+        order_invoice_info
+        where 1=1
+        <if test="ddh != null and ddh!= ''">
+            and ddh = #{ddh}
+        </if>
+        <if test="fpqqlsh != null and fpqqlsh!= ''">
+            and fpqqlsh = #{fpqqlsh}
+        </if>
+        limit 10
+    </select>
 </mapper>

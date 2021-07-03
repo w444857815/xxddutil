@@ -2,10 +2,10 @@ package com.dxhy.order.service;
 
 
 import com.dxhy.order.model.OrderInfo;
+import com.dxhy.order.util.PageUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * @author ：杨士勇
@@ -32,4 +32,6 @@ public interface ApiOrderInfoService {
     int executeDeleteSql(String sqlStr);
 
     int executeUpdateSql(String sqlStr);
+
+    PageUtils selectOrderInfo(String seaStr, String pageSize, String currPage);
 }
