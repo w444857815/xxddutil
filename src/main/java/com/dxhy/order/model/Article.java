@@ -27,6 +27,8 @@ public class Article implements Serializable {
 
     private Date createTime;
 
+    private Integer visitNum;
+
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;

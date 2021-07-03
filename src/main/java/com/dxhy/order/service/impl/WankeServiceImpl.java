@@ -70,4 +70,9 @@ public class WankeServiceImpl implements ApiWankeService {
     public List<Article> selectGgArtilesList(String s) {
         return articleDao.selectGgArtilesList(s);
     }
+
+    @Override
+    public int updateByPrimaryKeySelective(Article upNum) {
+        return articleDao.updateByPrimaryKeySelective(upNum);
+    }
 }

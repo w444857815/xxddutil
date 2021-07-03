@@ -82,6 +82,10 @@ public class WankeController {
     @ResponseBody
     public Map<String, Object> wzDetail(Integer id){
         Article article = wankeService.selectArtileById(id);
+        Article upNum = new Article();
+        upNum.setId(article.getId());
+        upNum.setVisitNum(article.getVisitNum()+1);
+        int j = wankeService.updateByPrimaryKeySelective(upNum);
         List<WxUser> wxUsers = wxUserService.selectByopenId(article.getOpenId());
         if(wxUsers.size()>0){
             article.setNickName(wxUsers.get(0).getNickname());

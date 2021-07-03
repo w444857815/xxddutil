@@ -27,4 +27,6 @@ public interface ApiWankeService {
 
     //获取公告信息
     List<Article> selectGgArtilesList(String s);
+
+    int updateByPrimaryKeySelective(Article upNum);
 }
