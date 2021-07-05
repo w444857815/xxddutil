@@ -156,7 +156,14 @@ public class WankeController {
     }
 
 
+    //获取全局配置
+    @RequestMapping(value="/globalCon")
+    @ResponseBody
+    public Map<String, Object> globalCon(String id){
+        GlobalCon globalCon = wankeService.selectGlobalCon(id);
+        return getSussRtn(globalCon, "查询成功");
 
+    }
 
 
 

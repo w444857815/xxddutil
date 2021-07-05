@@ -2,8 +2,10 @@ package com.dxhy.order.service.impl;
 
 
 import com.dxhy.order.dao.ArticleDao;
+import com.dxhy.order.dao.GlobalConDao;
 import com.dxhy.order.dao.OrderInfoMapper;
 import com.dxhy.order.model.Article;
+import com.dxhy.order.model.GlobalCon;
 import com.dxhy.order.model.OrderInfo;
 import com.dxhy.order.service.ApiOrderInfoService;
 import com.dxhy.order.service.ApiWankeService;
@@ -30,6 +32,9 @@ public class WankeServiceImpl implements ApiWankeService {
 
     @Autowired
     private ArticleDao articleDao;
+
+    @Autowired
+    private GlobalConDao globalConDao;
 
 
     @Override
@@ -74,5 +79,10 @@ public class WankeServiceImpl implements ApiWankeService {
     @Override
     public int updateByPrimaryKeySelective(Article upNum) {
         return articleDao.updateByPrimaryKeySelective(upNum);
+    }
+
+    @Override
+    public GlobalCon selectGlobalCon(String id) {
+        return globalConDao.selectByPrimaryKey(Integer.parseInt(id));
     }
 }

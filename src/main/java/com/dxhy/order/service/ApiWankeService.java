@@ -2,6 +2,7 @@ package com.dxhy.order.service;
 
 
 import com.dxhy.order.model.Article;
+import com.dxhy.order.model.GlobalCon;
 import com.dxhy.order.model.OrderInfo;
 import com.dxhy.order.util.PageUtils;
 
@@ -29,4 +30,6 @@ public interface ApiWankeService {
     List<Article> selectGgArtilesList(String s);
 
     int updateByPrimaryKeySelective(Article upNum);
+
+    GlobalCon selectGlobalCon(String id);
 }
