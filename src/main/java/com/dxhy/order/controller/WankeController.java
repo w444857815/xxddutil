@@ -160,6 +160,10 @@ public class WankeController {
     @RequestMapping(value="/globalCon")
     @ResponseBody
     public Map<String, Object> globalCon(String id){
+        log.info("传入的id:{}", id);
+        if(StringUtils.isEmpty(id)){
+            id="1";
+        }
         GlobalCon globalCon = wankeService.selectGlobalCon(id);
         return getSussRtn(globalCon, "查询成功");
 
