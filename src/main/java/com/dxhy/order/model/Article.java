@@ -23,6 +23,8 @@ public class Article implements Serializable {
 
     private String openId;
 
+    private String ggStatus;
+
     private String nickName;
 
     private Date createTime;

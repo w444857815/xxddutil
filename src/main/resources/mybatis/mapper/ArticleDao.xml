@@ -7,12 +7,13 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="is_pic" jdbcType="VARCHAR" property="isPic" />
     <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="gg_status" jdbcType="VARCHAR" property="ggStatus" />
     <result column="visit_num" jdbcType="VARCHAR" property="visitNum" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, is_pic, open_id,visit_num, create_time, update_time
+    id, title, content, is_pic, open_id,gg_status,visit_num, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
