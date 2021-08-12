@@ -14,6 +14,8 @@ public class Article implements Serializable {
 
     private String title;
 
+    private String hot;
+
     private String content;
 
     /**

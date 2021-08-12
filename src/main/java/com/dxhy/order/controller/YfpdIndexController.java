@@ -16,10 +16,7 @@ import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * YfpdUserpay
@@ -37,13 +34,27 @@ public class YfpdIndexController extends BaseController {
 
 
 
-    @RequestMapping(value = "/sqlreplace")
+    @RequestMapping(value = "/getbdPage")
     public ModelAndView toyfpdShow() throws Exception {
         ModelAndView mav = new ModelAndView();
-        String page = "sqlformate";
+        String page = "getbdPage";
         mav.setViewName(page);
 
         return mav;
+    }
+
+    @RequestMapping(value = "/getbendi")
+    @ResponseBody
+    public Map<String,Object> getbendi(String sessionid,String iplist) throws Exception {
+//        String result = "http://10.1.28.48:9000/?dxhy_sso_sessionid="+sessionid;
+        String[] split = iplist.split(",");
+        List<String> list = new LinkedList<String>();
+        for (int i = 0; i < split.length; i++) {
+            String url = "http://"+split[i]+":9000/?dxhy_sso_sessionid="+sessionid;
+            list.add(url);
+        }
+//        String result = "http://127.0.0.1:9000/?dxhy_sso_sessionid="+sessionid;
+        return getSuccessRtn(list);
     }
 
     @RequestMapping(value = "/sqlformate")
