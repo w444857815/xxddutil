@@ -1,7 +1,11 @@
 package com.dxhy.order.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -117,4 +121,66 @@ public class SqlReplaceUtil {
         return list;
     }
 
+    public static String getJsonValueByPath(String jsonStr, String pathStr, String szxj) {
+        JSONObject json = JSON.parseObject(jsonStr);
+
+        String allPath = pathStr;
+
+//        String path = "yhzxxs[1].mxxxs";
+//        String key = "hjse";
+
+        String[] pathList = allPath.split("\\.");
+
+        String key = pathList[pathList.length-1];
+        JSONArray result = new JSONArray();
+        int allSize = pathList.length;
+        boolean findLast = false;
+        for (int i = 0; i < allSize; i++) {
+            String p_item = pathList[i];
+            if(i==allSize-2){
+                p_item = p_item.substring(0, p_item.indexOf("["));
+                findLast = true;
+            }
+
+            if(p_item.contains("[")){
+                String item_key = p_item.substring(0, p_item.indexOf("["));
+                JSONArray array = json.getJSONArray(item_key);
+                int index = Integer.parseInt(p_item.substring(p_item.indexOf("[")+1, p_item.indexOf("]")));
+                json = array.getJSONObject(index);
+            }else{
+                Object nextJson = json.get(p_item);
+                if(nextJson instanceof JSONArray){
+                    result = json.getJSONArray(p_item);
+                }else if(nextJson instanceof Object){
+                    json = json.getJSONObject(p_item);
+                }
+                if(findLast){
+                    break;
+                }
+
+            }
+        }
+
+        String resultStr = "";
+        if("1".equals(szxj)){
+            BigDecimal je = BigDecimal.ZERO;
+            for (int i = 0; i < result.size(); i++) {
+                JSONObject jsonObject = result.getJSONObject(i);
+                je = je.add(jsonObject.getBigDecimal(key));
+            }
+            System.out.println(je);
+            return je.toString();
+        }else{
+            for (int i = 0; i < result.size(); i++) {
+                JSONObject jsonObject = result.getJSONObject(i);
+                resultStr = resultStr + jsonObject.getBigDecimal(key)+",";
+            }
+            if(resultStr.length()>0){
+                resultStr = resultStr.substring(0, resultStr.length()-1);
+            }
+            System.out.println(resultStr);
+            return resultStr;
+        }
+
+    }
 }

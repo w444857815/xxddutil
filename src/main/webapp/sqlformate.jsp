@@ -77,6 +77,42 @@
                 }
             });
         }
+
+
+        function getJsonResult(){
+            var jsonStr = $('#jsonStr').val();
+            var pathStr = $('#pathStr').val();
+            //数字相加 true就是数字加起来，false就是 , 隔开返回
+            var szxj = $('#szxj').is(":checked");
+            if(szxj){
+                szxj = "1";
+            }else{
+                szxj = "0";
+            }
+
+            $.ajax({
+                type: "post",
+                url: "${pageContext.request.contextPath}/getJsonPathResult",
+                data: {
+                    jsonStr: jsonStr,
+                    pathStr:pathStr,
+                    szxj:szxj
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == '-1') {
+                        alert(data.msg);
+                    }
+                    if (data.code == '0') {
+                        $('#jsonResultStr').val(data.data);
+                    }
+                },
+                error: function () {
+                    alert("网络错误！");
+                }
+            });
+
+        }
         
         
         
@@ -114,8 +150,20 @@
     <br/>
     <textarea style="width: 800px;height: 200px;" id="resultReplace"></textarea>
 </div>
+<br>
+<span>------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<div>
+    输入json:<br/>
+    <textarea style="width: 800px;height: 150px;" id="jsonStr"></textarea>
+    <br>
+    输入路径:<br>
+    <textarea style="width: 800px;height: 50px;" id="pathStr"></textarea>
+    <br>
+    <button onclick="getJsonResult();">获取结果</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="szxj" value="1" checked/>需要计算<br>
+    <textarea style="width: 800px;height: 50px;" id="jsonResultStr"></textarea>
 
-<button onclick="cs();">测试</button>
+</div>
+
 
 </body>
 

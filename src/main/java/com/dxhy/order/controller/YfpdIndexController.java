@@ -42,6 +42,14 @@ public class YfpdIndexController extends BaseController {
 
         return mav;
     }
+    @RequestMapping(value = "/sqlreplace")
+    public ModelAndView sqlreplace() throws Exception {
+        ModelAndView mav = new ModelAndView();
+        String page = "sqlformate";
+        mav.setViewName(page);
+
+        return mav;
+    }
 
     @RequestMapping(value = "/getbendi")
     @ResponseBody
@@ -129,6 +137,21 @@ public class YfpdIndexController extends BaseController {
         mav.setViewName(page);
 
         return mav;
+    }
+
+
+    @RequestMapping(value = "/getJsonPathResult")
+    @ResponseBody
+    public Map<String, Object> getJsonPathResult(String jsonStr,String pathStr,String szxj) throws Exception {
+        if (StringUtils.isBlank(jsonStr)) {
+            return getFailRtn("json数据必须传");
+        }
+        if (StringUtils.isBlank(pathStr)) {
+            return getFailRtn("路径必须传");
+        }
+
+        String replace = SqlReplaceUtil.getJsonValueByPath(jsonStr,pathStr,szxj);
+        return getSuccessRtn(replace);
     }
 
 
