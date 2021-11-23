@@ -59,6 +59,9 @@ databaseName:
   bw: invoice_bw_gaodeng
   a9: invoice_a9_xmgm
 
+file:
+  uploadPath: /root/uploadFiles/
+
 pagehelper:
 #  helper-dialect: mysql
   reasonable: false
