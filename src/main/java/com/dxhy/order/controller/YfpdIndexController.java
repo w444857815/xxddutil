@@ -67,18 +67,37 @@ public class YfpdIndexController extends BaseController {
 
     @RequestMapping(value = "/sqlformate")
     @ResponseBody
-    public Map<String, Object> sqlFormate(String sql, String params,String isFh) throws Exception {
+    public Map<String, Object> sqlFormate(String sql, String params,String isFh,String oneStep) throws Exception {
         if (StringUtils.isBlank(sql)) {
             return getFailRtn("sql必须传");
+        }
+        String useSql = "";
+        if(StringUtils.isNotEmpty(oneStep)){
+            useSql = sql;
+            useSql = useSql.replaceAll("(\\d{4})-(\\d{1,2})-(\\d{1,2}) (\\d{2}):(\\d{2}):(\\d{2}).(\\d{3})", "换行开始$1年$2月$3日 $4是$5分$6秒$7结束");
+            useSql = useSql.substring(0, useSql.indexOf("换行开始"));
+            params = sql.substring(sql.indexOf("Parameters:")+11, sql.length());
+        }else{
+            useSql = sql;
         }
         if (StringUtils.isBlank(params)) {
             return getFailRtn("参数必须传");
         }
-        String replace = SqlReplaceUtil.replace(sql, params);
+        String replace = SqlReplaceUtil.replace(useSql, params);
         if("1".equals(isFh)){
         	replace = replace + ";";
         }
         return getSuccessRtn(replace);
+    }
+
+    public static void main(String[] args) {
+        String sql = " select SUM(CAST(hjbhsje AS DECIMAL(18,2))) hjje, SUM(CAST(hjse AS DECIMAL(18,2))) hjse from special_invoice_reversal WHERE data_status\n" +
+                " = '0' and ( xhf_nsrsbh =? or ghf_nsrsbh = ? ) and create_time >= ? and ? >= create_time 2021-12-16 14:31:01.949 [DubboServerHandler-10.15.0.34:12348-thread-193] DEBUG c.d.o.d.S.selectSpecialInvoiceReversalsCount [143]- ==> Parameters: 913302056982010651(String), 913302056982010651(String), 2021-12-01(String), 2021-12-16 23:59:59(String)";
+        sql = sql.substring(0,sql.indexOf("["));
+        sql = sql.substring(0, sql.length()-24);
+        System.out.println(sql);
+
+
     }
 
     @RequestMapping(value = "/replaceStrformate")

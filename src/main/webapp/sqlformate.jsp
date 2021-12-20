@@ -30,11 +30,10 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    if (data.code == '-1') {
-                        alert(data.msg);
-                    }
                     if (data.code == '0') {
                         $('#result').val(data.data);
+                    }else{
+                        alert(data.msg);
                     }
                 },
                 error: function () {
@@ -42,6 +41,38 @@
                 }
             });
 
+        }
+
+
+        function formateOneStep(){
+            var sql = $('#sql').val();
+            var isFh = $('#isFh').is(":checked");
+            if(isFh){
+                isFh = "1";
+            }else{
+                isFh = "0";
+            }
+
+            $.ajax({
+                type: "post",
+                url: "${pageContext.request.contextPath}/sqlformate",
+                data: {
+                    sql: sql,
+                    oneStep: "1",
+                    isFh:isFh
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == '0') {
+                        $('#result').val(data.data);
+                    }else{
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert("网络错误！");
+                }
+            });
         }
 
 
@@ -132,7 +163,9 @@
     <textarea style="width: 800px;height: 50px;" id="params"></textarea>
     <br/>
     <br/>
-    <button onclick="formate();">格式化</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="isFh" value="1"/>结果带;
+    <button onclick="formate();">格式化</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="checkbox" id="isFh" value="1"/>结果带;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onclick="formateOneStep();">一键格式化</button>
     <br/>
     
     <br/>

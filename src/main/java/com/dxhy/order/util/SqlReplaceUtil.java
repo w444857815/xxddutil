@@ -173,7 +173,7 @@ public class SqlReplaceUtil {
         }else{
             for (int i = 0; i < result.size(); i++) {
                 JSONObject jsonObject = result.getJSONObject(i);
-                resultStr = resultStr + jsonObject.getBigDecimal(key)+",";
+                resultStr = resultStr + jsonObject.getString(key)+",";
             }
             if(resultStr.length()>0){
                 resultStr = resultStr.substring(0, resultStr.length()-1);
