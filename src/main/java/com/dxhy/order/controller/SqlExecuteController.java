@@ -1,6 +1,7 @@
 package com.dxhy.order.controller;
 
 import com.dxhy.order.service.ApiOrderInfoService;
+import com.dxhy.order.util.OfdConver;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -127,6 +129,14 @@ public class SqlExecuteController extends BaseController{
 
 
         return map;
+    }
+
+
+    @RequestMapping(value="/ofd")
+    @ResponseBody
+    public Map<String,Object> ofd() throws IOException {
+        OfdConver.toPng("/root/uploadFiles/hh.ofd", "/root/uploadFiles/", "aa");
+        return null;
     }
 
 }

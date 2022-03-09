@@ -1,5 +1,6 @@
 package com.dxhy.order.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -166,7 +167,7 @@ public class SqlReplaceUtil {
             BigDecimal je = BigDecimal.ZERO;
             for (int i = 0; i < result.size(); i++) {
                 JSONObject jsonObject = result.getJSONObject(i);
-                je = je.add(jsonObject.getBigDecimal(key));
+                je = je.add(ObjectUtil.isNull(jsonObject.get(key))? BigDecimal.ZERO:jsonObject.getBigDecimal(key));
             }
             System.out.println(je);
             return je.toString();
