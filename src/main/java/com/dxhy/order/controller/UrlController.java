@@ -89,6 +89,15 @@ public class UrlController {
     }
 
 
+    @GetMapping("/mail/sendEmail")
+    public ModelAndView sendEmail(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/mail/sendEmail");
+
+        return model;
+    }
+
+
     private static String sucCode = "0000";
 
     private static String failCode = "9999";

@@ -78,3 +78,22 @@ pagehelper:
   # 这个一定要加上，不然mysql和oracle分页两个只能用一个，另一个会报错，加上后，两中数据库分页都可以用了
   auto-runtime-dialect: true
   row-bounds-with-count: true
+
+
+mail:
+  #发邮件的账号密码
+  addressPass: 1839940670@qq.com~~usxwimllcjrjeidc
+  senderName: 统一发送人
+  logoPath: E:/workspace/xxddutil/src/main/resources/logo.jpg
+  qq:
+    smtphost: SMTP.qq.com
+    hostport: 587
+    #两个端口都可用，一个不行就换另一个
+#    hostport: 465
+    auth: true
+    smtpname: SMTPS
+  126:
+    smtphost: smtp.126.com
+    hostport: 465
+    auth: true
+    smtpname: SMTPS

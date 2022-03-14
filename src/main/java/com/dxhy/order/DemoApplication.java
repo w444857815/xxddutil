@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 //@Component
 @ComponentScan("com.dxhy")
 @EnableConfigurationProperties
+@ComponentScan("com.dxhy.order.util")
 public class DemoApplication {
 
     public static void main(String[] args) {

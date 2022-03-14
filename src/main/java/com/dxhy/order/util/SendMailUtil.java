@@ -1,20 +1,23 @@
 package com.dxhy.order.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dxhy.order.model.Attachments;
 import com.dxhy.order.model.EmailContent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.annotation.PostConstruct;
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -25,25 +28,70 @@ import java.util.*;
  * @Version 1.0
  */
 @Slf4j
+@Component
 public class SendMailUtil {
 
-    private final static String messageType = "text/html;charset=UTF-8";//相应内容类型，编码类型
+    private String messageType = "text/html;charset=UTF-8";//相应内容类型，编码类型
 
     private String sucCode = "0000";
 
     private String failCode = "9999";
 
+
+    public static String smtpHost;
+
+
+    public static String hostPort;
+
+
+    public static String smtpName;
+
+
+    public static String logoPath;
+
+    public static String addressPass;
+
+    @Value("${mail.qq.smtphost}")
+    public void setSmtpHost(String smtpHost) {
+        SendMailUtil.smtpHost = smtpHost;
+    }
+
+    @Value("${mail.qq.hostport}")
+    public void setHostPort(String hostPort) {
+        SendMailUtil.hostPort = hostPort;
+    }
+
+    @Value("${mail.qq.smtpname}")
+    public void setSmtpName(String smtpName) {
+        SendMailUtil.smtpName = smtpName;
+    }
+
+
+    @Value("${mail.logoPath}")
+    public void setLogoPath(String logoPath) {
+        SendMailUtil.logoPath = logoPath;
+    }
+
+
+    @Value("${mail.addressPass}")
+    public void setAddressPass(String addressPass)
+    {
+        SendMailUtil.addressPass = addressPass;
+    }
+
+
+
     /**
      *
-     * @param ifNeedAccount	是否需要传账号密码，false不传，true传
-     * @param fromEmail	发送人邮箱地址，根据ifNeedAccount来决定是否可以为空
-     * @param password	发送人邮箱密码址，根据ifNeedAccount来决定是否可以为空
+     * @param ifNeedAccount    是否需要传账号密码，false不传，true传
+     * @param fromEmail    发送人邮箱地址，根据ifNeedAccount来决定是否可以为空
+     * @param password    发送人邮箱密码址，根据ifNeedAccount来决定是否可以为空
      * @param emailTitle 邮件标题
-     * @param content	邮件内容
-     * @param senderName	发送人显示名称
-     * @param contactEmails	收件人地址
-     * @param ccEmails	抄送人地址
-     * @param filesList	附件
+     * @param content    邮件内容
+     * @param senderName    发送人显示名称
+     * @param contactEmails    收件人地址
+     * @param ccEmails    抄送人地址
+     * @param filesList    附件
      * @param pics
      * @return
      * TODO
@@ -61,30 +109,13 @@ public class SendMailUtil {
             , String[] contactEmails
             , String[] ccEmails
             , List<File> filesList
-            , String[] pics) throws Exception {
+            , boolean showLogo) throws Exception {
         try {
-/*            final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";//SSL加密
-            MailSSLSocketFactory sf = new MailSSLSocketFactory();
-            sf.setTrustAllHosts(true);*/
             //第一步：配置javax.mail.Session对象
             Properties props = new Properties();   // 创建Properties 类用于记录邮箱的一些属性
             //props.put("mail.smtp.socketFactory.class", SSL_FACTORY);
             InputStream io = null;
-            Properties properties = new Properties();
-//			io = EmailConfigConstant.class.getResourceAsStream("/mail.properties");
-            io = SendMailUtil.class.getResourceAsStream("/mail.properties");
-            properties.load(io);
-            //如果是true，说明要用他自己传的账号密码来发邮件
-            if(!ifNeedAccount){
-                String addressPass = properties.getProperty("addressPass");
-                Map<String, String> randomEmail = RandomUtils.randomEmail(addressPass);
-                if(CollectionUtils.isEmpty(randomEmail)){
-                    log.info("mail系统中mail.properties没有配置发件人");
-                }else{
-                    fromEmail = randomEmail.get("fromEmail");
-                    password = randomEmail.get("password");
-                }
-            }
+
             log.info("发送邮件：发件人地址{},发件人密码{},收件人地址{}",fromEmail,password,contactEmails);
             if(!EmailUtils.validateEmail(fromEmail)){
                 return getFailRtn("发件人邮箱格式不正确");
@@ -93,14 +124,6 @@ public class SendMailUtil {
             String mailSource = fromEmail.substring(fromEmail.lastIndexOf("@") + 1);
             mailSource = mailSource.substring(0, mailSource.indexOf("."));
 //            String mailSource = fromEmail.substring(fromEmail.lastIndexOf("@")+1,fromEmail.lastIndexOf("."));;
-
-            String smtpHost = properties.getProperty(mailSource+".smtphost");
-            if(null==smtpHost||"".equals(smtpHost)||"null".equals(smtpHost)){
-                return getFailRtn("未设置此邮箱服务器配置");
-            }
-            String hostPort = properties.getProperty(mailSource+".hostport");
-            //String auth = properties.getProperty(mailSource+".auth");
-            String smtpName = properties.getProperty(mailSource+".smtpname");
 
             /**
              props.put("mail.smtp.host", smtpHost);  //此处填写SMTP服务器
@@ -120,7 +143,7 @@ public class SendMailUtil {
             props.put("mail.transport.protocol", smtpName);     // 发送邮件协议名称
             //props.setProperty("mail.smtp.socketFactory.port", "465");
             //props.put("mail.smtp.ssl.socketFactory", sf);
-            Session mailSession = Session.getInstance(props, new MyAuthenticator(fromEmail.substring(0, fromEmail.lastIndexOf("@")), password));//此处填写你的账号和口令(16位口令)
+            Session mailSession = Session.getInstance(props, new MyAuthenticator(fromEmail, password));//此处填写你的账号和口令(16位口令)
             //第二步：编写消息
             //InternetAddress toAddress = new InternetAddress(to); // 设置收件人的邮箱
             MimeMessage message = new MimeMessage(mailSession);
@@ -140,6 +163,7 @@ public class SendMailUtil {
                 }
             }
             //message.setRecipient(RecipientType.TO, new String[moreUsers.size()]);
+            //收件人
             message.setRecipients(Message.RecipientType.TO, sendTo);
 
             //抄送人
@@ -156,10 +180,31 @@ public class SendMailUtil {
 
             // 向multipart对象中添加邮件的各个部分内容，包括文本内容和附件
             Multipart multipart = new MimeMultipart();
+
+            /*
+            * @Description 要在正文中添加图片，需要先写图片元素，然后在下面把id赋值进去，否则会进附件且乱码
+            **/
+
+            //如果展示logo，内容里加logo位置和元素id
+            String showLogoStr = "";
+            if(showLogo){
+                showLogoStr = "<div><img src='cid:logo0' style='height:150px;width:700px;'/></div>";
+                // 正文的图片部分
+                MimeBodyPart jpgBody = new MimeBodyPart();
+                //FileDataSource fds = new FileDataSource("E:\\workspace\\xxddutil\\src\\main\\resources\\logo.jpg");
+                FileDataSource fds = new FileDataSource(FileUtil.getResourcePath()+"logo.jpg");
+                jpgBody.setDataHandler(new DataHandler(fds));
+                jpgBody.setContentID("logo0");
+                multipart.addBodyPart(jpgBody);
+            }
+
+
             // 添加邮件正文
-            BodyPart contentPart = new MimeBodyPart();
-            contentPart.setContent(content, messageType);
-            multipart.addBodyPart(contentPart);
+            BodyPart textPart = new MimeBodyPart();
+            textPart.setContent(content + showLogoStr, messageType);
+            multipart.addBodyPart(textPart);
+
+            //邮件附件
             if (filesList != null&&filesList.size()>0) {
                 for (File attachment:filesList) {
                     BodyPart attachmentBodyPart = new MimeBodyPart();
@@ -176,40 +221,8 @@ public class SendMailUtil {
                     multipart.addBodyPart(attachmentBodyPart);
                 }
             }
-//            String logoPng = "E:\\workspaceRc\\sims-order-sunac\\order-mail\\target\\dxLogo.jpg";
-            String logoPng = properties.getProperty("mailpush.attachmentpath")+File.separator+"dxLogo.jpg";
-            File logoFile = new File(logoPng);
-            if(!logoFile.exists()){
-                /*Logo图片*/
-                InputStream resourceAsStream = this.getClass().getResourceAsStream("/config/mail/dxLogo.jpg");
-                byte[] buffer = new byte[resourceAsStream.available()];
-                resourceAsStream.read(buffer);
 
 
-                File targetFile = new File(logoPng);
-                OutputStream outStream = new FileOutputStream(targetFile);
-                outStream.write(buffer);
-            }
-
-            MimeBodyPart img = new MimeBodyPart();
-            DataHandler dh = new DataHandler(new FileDataSource(logoPng));//图片路径
-            img.setDataHandler(dh);
-            img.setContentID("pic0");
-            multipart.addBodyPart(img);
-            /*Logo图片结束*/
-
-            /**
-            if(null!=pics&&pics.length>0){
-                MimeBodyPart img = new MimeBodyPart();
-                for (int i = 0; i < pics.length; i++) {
-                    //邮件里的图片
-                    DataHandler dh = new DataHandler(new FileDataSource(path+pics[i]));//图片路径
-                    img.setDataHandler(dh);
-                    img.setContentID("pic"+i);
-                    multipart.addBodyPart(img);
-                }
-            }
-             */
 
             message.setSentDate(Calendar.getInstance().getTime());
             message.setSubject(emailTitle);   // 设置邮件标题
@@ -218,12 +231,9 @@ public class SendMailUtil {
             message.setContent(multipart);
 
             // 第三步：发送消息
-/*            Transport transport = mailSession.getTransport("smtp");
-            transport.connect(smtpHost, fromEmail, password);
-            transport.send(message, message.getRecipients(RecipientType.TO)); // 发送邮件啦
-*/
+
             Transport.send(message);
-            return getSussRtn(null, "发送成功");
+            return getSussRtn(null, "发送邮件服务器成功");
         } catch (Exception e) {
             log.error("邮件发送错误:{}",e);
             return getFailRtn("邮件发送错误"+e.getMessage());
@@ -246,6 +256,14 @@ public class SendMailUtil {
         return rtn;
     }
 
+    @PostConstruct
+    private void init() {
+        // 默认java关于邮箱的参数splitlongparameters为true, 即太长会处理为.bin
+        // 我们手动关闭即可
+        System.setProperty("mail.mime.splitlongparameters", "false");
+        System.setProperty("mail.mime.charset", "UTF-8");
+    }
+
     /**
      * 获取失败的返回内容
      *
@@ -266,9 +284,6 @@ public class SendMailUtil {
         if(null==content.getSubjects()||"".equals(content.getSubjects())){
             return getFailRtn("邮件标题(主题)不能为空");
         }
-        if(StringUtils.isEmpty(content.getTemplate_id())){
-            return getFailRtn("模板id不能为空");
-        }
         if(null==content.getTo()||content.getTo().length==0){
             return getFailRtn("收件人信息不能为空");
         }
@@ -277,82 +292,39 @@ public class SendMailUtil {
         }
 
         //获取内容
-        String mailcontent = "";
+        String mailcontent = content.getContents();
         //邮件标题
-        String Subjects = "";
-        try {
-            String template_id = content.getTemplate_id();
-            //正常发票
-            if("53".equals(template_id)){
-                template_id = "zjFpDelivery.ftl";
-                Subjects = "【电子发票】您收到一张新的电子发票[发票号码："+content.getSubjects()+"]";
-            }
-            //异常发票
-            else if("55".equals(template_id)){
-                template_id = "zjFpYichang.ftl";
-                Subjects = "异常订单"+content.getSubjects();
-            }
-            //余票预警
-            else if("65".equals(template_id)){
-                template_id = "Invoice_Ypyj.ftl";
-                Subjects = "余票预警提醒";
-            }
-            mailcontent = FreeMarkerUtil.generateString(
-                    content.getContents(),
-                    template_id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return getFailRtn("生成模板信息出错");
+        String Subjects = content.getSubjects();
+
+        String[] zhPass = addressPass.split("~~");
+        if(zhPass.length!=2){
+            return getFailRtn("请先配置账号密码");
         }
-        InputStream io = null;
-        Properties properties = new Properties();
-        io = SendMailUtil.class.getResourceAsStream("/mail.properties");
-        try {
-            properties.load(io);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         //处理附件
         //附件列表
         List<File> filesList = new LinkedList<File>();
-        if(content.getAttachments()!=null&&content.getAttachments().length>0){
-            for (Attachments item:content.getAttachments()) {
-//				String fileName = item.getName()+"."+item.getType();
-                String fileName = item.getName();
-                FileUtil.base64ToFile(properties.getProperty("mailpush.attachmentpath"), item.getContent(), fileName);
-                String AllFilePath = properties.getProperty("mailpush.attachmentpath")+File.separator+fileName;
-                filesList.add(new File(AllFilePath));
-            }
-        }
+        //如果有附件,此处例子2个，第一个jpg，第二个txt
+        filesList.add(new File(FileUtil.getResourcePath()+"temp/图片附件.jpg"));
+        filesList.add(new File(FileUtil.getResourcePath()+"temp/txt文本.txt"));
+
 
         Map<String, String> sendEmail = sendEmail(content.isIF_NEED_ACCOUNT(),
-                content.getFROM_ADDRESS(),content.getPASSWORD(),Subjects,
+                zhPass[0],zhPass[1],Subjects,
                 mailcontent,content.getSenderName(),content.getTo(),
-                content.getCC()==null?new String[]{}:content.getCC(),filesList,content.getPICS());
+                content.getCC()==null?new String[]{}:content.getCC(),
+                filesList,
+                content.isShowlogo());
 
         //发送完了把创建的附件删除
-        for (File file:filesList) {
+        /*for (File file:filesList) {
             file.delete();
         }
-
-/*        EmailSendRSP emailSendRSP = new EmailSendRSP();
-        emailSendRSP.setCode(sendEmail.get("code").toString());
-        emailSendRSP.setData(sendEmail.get("data"));
-        emailSendRSP.setMsg(sendEmail.get("msg").toString());
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("code", sendEmail.get("code").toString());
-        map.put("msg", sendEmail.get("msg").toString());
-        map.put("data", sendEmail.get("data"));
-        return map;*/
+*/
         return sendEmail;
     }
 
 
-    public static void main(String[] args) {
-//        File file = new File("E:\\a\\a.txt");
-        FileUtil.base64ToFile("E:\\a\\", "yiyi", "nihao.txt");
-//        file.mkdir();
-    }
 
 }
 

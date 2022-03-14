@@ -2,10 +2,13 @@
 [
 	{ text: 'redis使用',isexpand:false, children: [
 			{url:"redis/miaosha",text:"秒杀，防止超卖"},
-			{url:"redis/zsetOrder",text:"zset排名"},
-			{url:"demos/base/dragresizable.htm",text:"拖动并改变大小"},
-			{url:"demos/base/tip.htm",text:"气泡"},
+			{url:"redis/zsetOrder",text:"zset排名普通score"},
+			{url:"redis/zsetOrderJq",text:"zset排名精确秒毫秒时间戳"},
 			{url:"demos/base/tip2.htm",text:"气泡2"}
+		]
+	},
+	{ text: '发送邮件',isexpand:false, children: [
+			{url:"mail/sendEmail",text:"发送邮件"}
 		]
 	},
     { text: '基础',isexpand:false, children: [ 

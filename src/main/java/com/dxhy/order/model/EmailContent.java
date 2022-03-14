@@ -3,6 +3,7 @@ package com.dxhy.order.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class EmailContent implements Serializable{
@@ -41,7 +42,7 @@ public class EmailContent implements Serializable{
 	/**
 	 * 邮件内容
 	 */
-	private String contents[];
+	private String contents;
 	/**
 	 * 图片地址
 	 */
@@ -63,10 +64,15 @@ public class EmailContent implements Serializable{
 	 */
 	private String CCNAME[];
 	/**
-	 * 附件
+	* @Description 是否显示logo
+	**/
+	private boolean Showlogo;
+	/**
+	 * 附件,此处是base64字符串
 	 */
-	private Attachments[] attachments;
-	
+	//private Attachments[] attachments;
+	private List<String> fjFiles;
+
 	/**
 	 *发票代码
 	 */
