@@ -88,11 +88,42 @@ public class UrlController {
         return model;
     }
 
-
+    /**
+    * @Description 发邮件功能
+    * @Return org.springframework.web.servlet.ModelAndView
+    * @Author wangruwei
+    * @Date 2022/3/15 9:44
+    **/
     @GetMapping("/mail/sendEmail")
     public ModelAndView sendEmail(){
         ModelAndView model = new ModelAndView();
         model.setViewName("ligerui/myWork/mail/sendEmail");
+
+        return model;
+    }
+
+    /**
+    * @Description 上传下载。
+    * @Author wangruwei
+    * @Date 2022/3/15 9:44
+    **/
+    @GetMapping("/file/uploadDown")
+    public ModelAndView uploadDown(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/file/uploadDown");
+
+        return model;
+    }
+
+    /**
+    * @Description 上传处理excel
+    * @Author wangruwei
+    * @Date 2022/3/15 9:44
+    **/
+    @GetMapping("/file/uploadDownExcel")
+    public ModelAndView uploadDownExcel(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/file/uploadDownExcel");
 
         return model;
     }

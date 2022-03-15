@@ -1,25 +1,18 @@
 package com.dxhy.order.controller;
 
-import com.dxhy.order.model.EmailBody;
 import com.dxhy.order.model.EmailContent;
-import com.dxhy.order.model.EmailSendResponse;
-import com.dxhy.order.model.ReturnStateInfo;
 import com.dxhy.order.util.Base64Encoding;
 import com.dxhy.order.util.DataHandleUtil;
 import com.dxhy.order.util.JsonUtils;
 import com.dxhy.order.util.SendMailUtil;
-import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -134,26 +127,5 @@ public class MailController {
         return rtn;
     }
 
-
-    /**
-     * 设置邮件体
-     *
-     * @param content
-     * @return
-     * @throws Exception
-     */
-    private static String setEmailBody(EmailContent content) throws Exception {
-        //设置邮件体参数
-        String serialNumber = "000000000011" + String.valueOf(System.currentTimeMillis());
-//        content.setSerialNum(serialNumber);
-        EmailBody globalInfo = new EmailBody();
-        globalInfo.setZipCode("0");
-        globalInfo.setEncryptCode("0");
-        globalInfo.setDataExchangeId(serialNumber);
-        globalInfo.setContent(Base64Encoding.encode(DataHandleUtil.json(content)));
-        String json = DataHandleUtil.json(globalInfo);
-        log.info("组件的数据体json:{}", json);
-        return json;
-    }
 
 }
