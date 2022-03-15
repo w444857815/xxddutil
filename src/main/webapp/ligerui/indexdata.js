@@ -12,8 +12,8 @@
 		]
 	},
     { text: '上传下载',isexpand:false, children: [
-		{url:"/file/uploadDown",text:"上传下载文件" },
-		{url:"/file/uploadDownExcel",text:"上传处理excel"},
+		{url:"file/uploadDown",text:"上传下载文件" },
+		{url:"file/uploadDownExcel",text:"上传处理excel"},
 		{url:"demos/base/drag2.htm",text:"拖动2"},
 		{url:"demos/base/dragresizable.htm",text:"拖动并改变大小"},
 		{url:"demos/base/tip.htm",text:"气泡"},

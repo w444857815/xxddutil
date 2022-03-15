@@ -6,11 +6,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>zSet操作排序</title>
+    <title>上传下载</title>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
 
         function ajaxtSubmit(){
+            // $('#result').attr("style","height: 8px;background: green;position: relative; top: 1px;left: 1px;width: 20%");
+            // return;
             var files = document.getElementById("uploadFile").files;
             //文件数量
             //alert(files.length);
@@ -27,6 +29,8 @@
                 xhr:xhrOnProgress(function(e){
                     var percent=e.loaded / e.total;//计算百分比
                     $('#xxx').val(percent);
+                    $('#hhh').html(percent*100+"%");
+                    $('#result').attr("style","height: 8px;background: green;position: relative; top: 1px;left: 1px;width: "+percent*100+"%");
                 }),
                 processData : false,// 不处理数据
                 contentType : false,// 不设置内容类型
@@ -90,10 +94,11 @@
 
     <button onclick="ajaxtSubmit()">ajax提交</button>
     <div style="border:black solid 1px; width: 800px;height: 10px;">
-        <div id="result" style="height: 8px;background: green;position: relative; top: 1px;left: 1px;"></div>
+        <div id="result" style="height: 8px;background: green;position: relative; top: 1px;left: 1px;width: 0%"></div>
     </div>
     <input id="xxx"/>
-
+    <span id="hhh"
+        ></span>
 
     <br><br><br><br><br><br><br>
 
