@@ -7,17 +7,19 @@ import com.dxhy.order.util.RedisLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,10 +56,10 @@ public class StockService extends BaseServiceImpl {
     /**
      * 执行扣库存的脚本
      */
-    //public static final String STOCK_LUA;
+    public static final String STOCK_LUA;
 
-    /*static {
-        *//**
+    static {
+        /**
          *
          * @desc 扣减库存Lua脚本
          * 库存（stock）-1：表示不限库存
@@ -71,7 +73,7 @@ public class StockService extends BaseServiceImpl {
          *   -1:不限库存
          *   大于等于0:剩余库存（扣减之后剩余的库存）
          *      redis缓存的库存(value)是-1表示不限库存，直接返回1
-         *//*
+         */
         StringBuilder sb = new StringBuilder();
         sb.append("if (redis.call('exists', KEYS[1]) == 1) then");
         sb.append("    local stock = tonumber(redis.call('get', KEYS[1]));");
@@ -88,173 +90,32 @@ public class StockService extends BaseServiceImpl {
         STOCK_LUA = sb.toString();
     }
 
-    *//**
-     * @param key           库存key
-     * @param expire        库存有效时间,单位秒
-     * @param num           扣减数量
-     * @param stockCallback 初始化库存回调函数
-     * @return -2:库存不足; -1:不限库存; 大于等于0:扣减库存之后的剩余库存
-     *//*
-    public long stock(String key, long expire, int num, IStockCallback stockCallback) {
-        long stock = stock(key, num);
-        // 初始化库存
-        if (stock == UNINITIALIZED_STOCK) {
-            RedisLock redisLock = new RedisLock(redisTemplate, key);
-            try {
-                // 获取锁
-                if (redisLock.lock()) {
-                    // 双重验证，避免并发时重复回源到数据库
-                    stock = stock(key, num);
-                    if (stock == UNINITIALIZED_STOCK) {
-                        // 获取初始化库存
-                        final int initStock = stockCallback.getStock();
-                        // 将库存设置到redis
-                        redisTemplate.opsForValue().set(key, initStock, expire, TimeUnit.SECONDS);
-                        // 调一次扣库存的操作
-                        stock = stock(key, num);
-                    }
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            } finally {
-                redisLock.unlock();
-            }
-
-        }
-        return stock;
-    }
-
-    *//**
-     * 加库存(还原库存)
-     *
-     * @param key 库存key
-     * @param num 库存数量
-     * @return
-     *//*
-    public long addStock(String key, int num) {
-
-        return addStock(key, null, num);
-    }
-
-    *//**
-     * 加库存
-     *
-     * @param key    库存key
-     * @param expire 过期时间（秒）
-     * @param num    库存数量
-     * @return
-     *//*
-    public long addStock(String key, Long expire, int num) {
-        boolean hasKey = redisTemplate.hasKey(key);
-        // 判断key是否存在，存在就直接更新
-        if (hasKey) {
-            return redisTemplate.opsForValue().increment(key, num);
-        }
-
-        Assert.notNull(expire, "初始化库存失败，库存过期时间不能为null");
-        RedisLock redisLock = new RedisLock(redisTemplate, key);
-        try {
-            if (redisLock.lock()) {
-                // 获取到锁后再次判断一下是否有key
-                hasKey = redisTemplate.hasKey(key);
-                if (!hasKey) {
-                    // 初始化库存
-                    redisTemplate.opsForValue().set(key, num, expire, TimeUnit.SECONDS);
-                }
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            redisLock.unlock();
-        }
-
-        return num;
-    }
-
-    *//**
-     * 获取库存
-     *
-     * @param key 库存key
-     * @return -1:不限库存; 大于等于0:剩余库存
-     *//*
-    public int getStock(String key) {
-        Integer stock = (Integer) redisTemplate.opsForValue().get(key);
-        return stock == null ? -1 : stock;
-    }
-
-    *//**
-     * 扣库存
-     *
-     * @param key 库存key
-     * @param num 扣减库存数量
-     * @return 扣减之后剩余的库存【-3:库存未初始化; -2:库存不足; -1:不限库存; 大于等于0:扣减库存之后的剩余库存】
-     *//*
-    private Long stock(String key, int num) {
-        // 脚本里的KEYS参数
-        List<String> keys = new ArrayList<>();
-        keys.add(key);
-        // 脚本里的ARGV参数
-        List<String> args = new ArrayList<>();
-        args.add(Integer.toString(num));
-
-        long result = redisTemplate.execute(new RedisCallback<Long>() {
-            @Override
-            public Long doInRedis(RedisConnection connection) throws DataAccessException {
-                Object nativeConnection = connection.getNativeConnection();
-                // 集群模式和单机模式虽然执行脚本的方法一样，但是没有共同的接口，所以只能分开执行
-                // 集群模式
-                if (nativeConnection instanceof JedisCluster) {
-                    return (Long) ((JedisCluster) nativeConnection).eval(STOCK_LUA, keys, args);
-                }
-
-                // 单机模式
-                //else if (nativeConnection instanceof Jedis) {
-                //    return (Long) ((Jedis) nativeConnection).eval(STOCK_LUA, keys, args);
-                //}
-                else{
-                    return (Long) ((Jedis) nativeConnection).eval(STOCK_LUA, keys, args);
-                }
-                //return UNINITIALIZED_STOCK;
-            }
-        });
-        return result;
-    }*/
 
     String key = "kucun";
     //减库存
     public Map<String,Object> jian(int num) {
-        RedisLock redisLock = new RedisLock(redisTemplate, key);
+        Long result = null;
+        // 脚本里的KEYS参数
+        List<String> keys = new ArrayList<>();
+        keys.add(key);
+        // 脚本里的ARGV参数 num
         try {
-            //如果上锁成功，去减库存
-            if(redisService.setNx("key", "锁")){
-                logger.info("上锁成功，去执行减库存");
-                // 获取到锁后再次判断一下是否有key
-                trueJian(num);
-            }else{
-                //如果上锁失败，说明正在减库存，然后递归执行此方法
-                logger.info("已经有锁，递归执行减库存方法");
-                this.jian(num);
-            }
+            //调用lua脚本并执行
+            DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
+            redisScript.setResultType(Long.class);//返回类型是Long
 
+            //redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("redis/redis_lock4.lua")));
+
+            redisScript.setScriptText(STOCK_LUA);
+            logger.info("执行lua脚本减库存开始");
+            result = redisTemplate.execute(redisScript, keys, num+"");
+            logger.info("执行lua脚本减库存结束:剩余{}",result);
 
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        } finally {
-            redisService.unlock(key);
-            //redisLock.unlock();
+            e.printStackTrace();
         }
-        return getSussRtn("","");
+        return getSussRtn(result, "-3:库存未初始化,-2:库存不足,-1:不限库存,大于等于0:剩余库存");
     }
 
-    private Map<String,Object> trueJian(int num) {
-        if(Integer.parseInt(redisService.get(key).toString())<=0){
-            logger.info("已经卖完");
-            return getFailRtn("已经卖完");
-        }else{
-            //库存减一
-            long decr = redisService.decr(key, 1);
-            logger.info("{}库存减1成功,剩余:{}",key,decr);
-            return getSussRtn(decr, "库存减一成功，剩余"+decr);
-        }
-    }
+
 }
