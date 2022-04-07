@@ -1,5 +1,6 @@
 package com.dxhy.order.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.dxhy.order.config.redis.RedisUtil;
 import com.dxhy.order.service.impl.BaseServiceImpl;
 import com.dxhy.order.util.RedisLock;
@@ -224,25 +225,36 @@ public class StockService extends BaseServiceImpl {
     public Map<String,Object> jian(int num) {
         RedisLock redisLock = new RedisLock(redisTemplate, key);
         try {
-            //if (redisService.lock(key)) {
+            //如果上锁成功，去减库存
+            if(redisService.setNx("key", "锁")){
+                logger.info("上锁成功，去执行减库存");
                 // 获取到锁后再次判断一下是否有key
+                trueJian(num);
+            }else{
+                //如果上锁失败，说明正在减库存，然后递归执行此方法
+                logger.info("已经有锁，递归执行减库存方法");
+                this.jian(num);
+            }
 
-                if(Integer.parseInt(redisService.get(key).toString())<=0){
-                    logger.info("已经卖完");
-                    return getFailRtn("已经卖完");
-                }else{
-                    //库存减一
-                    long decr = redisService.decr(key, 1);
-                    logger.info("{}库存减1成功,剩余:{}",key,decr);
-                    return getSussRtn(decr, "库存减一成功，剩余"+decr);
-                }
-            //}
+
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
-            //redisService.unlock(key);
+            redisService.unlock(key);
             //redisLock.unlock();
         }
         return getSussRtn("","");
+    }
+
+    private Map<String,Object> trueJian(int num) {
+        if(Integer.parseInt(redisService.get(key).toString())<=0){
+            logger.info("已经卖完");
+            return getFailRtn("已经卖完");
+        }else{
+            //库存减一
+            long decr = redisService.decr(key, 1);
+            logger.info("{}库存减1成功,剩余:{}",key,decr);
+            return getSussRtn(decr, "库存减一成功，剩余"+decr);
+        }
     }
 }

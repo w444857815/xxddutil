@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>上传下载</title>
+    <title>上传处理excel</title>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
 
@@ -24,7 +24,7 @@
             formData.append("password","123456");
             $.ajax({
                 type:"post",
-                url:"${pageContext.request.contextPath}/file/uploadFile",
+                url:"${pageContext.request.contextPath}/file/excel",
                 data:formData,
                 xhr:xhrOnProgress(function(e){
                     var percent=e.loaded / e.total;//计算百分比
@@ -73,7 +73,7 @@
             //本项目没用，可用此定义文件名
             var fileName = "testAjaxDownload.txt";
 
-            var excelType = "0";
+            var excelType = "1";
 
             var form = $("<form></form>").attr("action", url).attr("method", "post");
 
@@ -96,7 +96,7 @@
     </div>
 
 
-    <button onclick="ajaxtSubmit()">ajax提交</button>
+    <button onclick="ajaxtSubmit()">上传excel</button>
     <div style="border:black solid 1px; width: 800px;height: 10px;">
         <div id="result" style="height: 8px;background: green;position: relative; top: 1px;left: 1px;width: 0%"></div>
     </div>
@@ -107,6 +107,6 @@
     <br><br><br><br><br><br><br>
 
 
-    <button onclick="download()">下载文件</button>
+    <button onclick="download()">下载excel模板</button>
 </body>
 </html>

@@ -1,24 +1,18 @@
 package com.dxhy.order.controller;
 
-import com.dxhy.order.model.Article;
-import com.dxhy.order.model.GlobalCon;
-import com.dxhy.order.model.WxLoginInfo;
-import com.dxhy.order.model.WxUser;
-import com.dxhy.order.service.ApiWankeService;
-import com.dxhy.order.service.ApiWxUserService;
+import com.dxhy.order.constant.DownloadExcelEnum;
+import com.dxhy.order.exception.OrderReceiveException;
+import com.dxhy.order.model.*;
+import com.dxhy.order.model.excel.NewOrderExcel;
+import com.dxhy.order.service.ExcelReadService;
 import com.dxhy.order.util.FileUtil;
-import com.dxhy.order.util.HttpUtils;
 import com.dxhy.order.util.JsonUtils;
-import com.dxhy.order.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.ujmp.core.util.R;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +38,11 @@ public class FileController extends BaseController{
 
     @Value("${file.uploadPath}")
     private String uploadPath;
+
+    private static final String LOGGER_MSG = "(文件处理)";
+
+    @Resource
+    private ExcelReadService excelReadService;
 
     //处理文件上传
     @RequestMapping(value="/upload", method = RequestMethod.POST)
@@ -117,10 +116,28 @@ public class FileController extends BaseController{
      */
     @RequestMapping("/downLoad")
     @ResponseBody
-    public Map<String,Object> downLoadFtpFileMould(String fileName, HttpServletResponse response) {
+    public Map<String,Object> downLoadFtpFileMould(String fileName,String excelType, HttpServletResponse response) {
         try {
-            fileName = "logo.png";
-            File downLoadFile = new File(FileUtil.getResourcePath() + "logo.png");
+
+            //获取要下载的模板名称
+            DownloadExcelEnum downloadExcelEnum = null;
+            if (StringUtils.isNotBlank(excelType)) {
+                switch (excelType) {
+                    case "0":
+                        downloadExcelEnum = DownloadExcelEnum.LOGO;
+                        break;
+                    case "1":
+                        downloadExcelEnum = DownloadExcelEnum.EXCEL_ORDER_IMPORT;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + excelType);
+                }
+            }
+
+            //----------------------下面无需关心
+
+
+            File downLoadFile = new File(FileUtil.getResourcePath() + downloadExcelEnum.getKey());
             // 获取文件的长度
             long fileLength = downLoadFile.length();
             BufferedInputStream bis;
@@ -129,7 +146,7 @@ public class FileController extends BaseController{
             // 设置文件输出类型
             response.setContentType("application/octet-stream");
             response.setHeader("Content-disposition",
-                    "attachment; filename=" + new String(fileName.getBytes(StandardCharsets.UTF_8), "ISO8859-1"));
+                    "attachment; filename=" + new String(downloadExcelEnum.getValue().getBytes(StandardCharsets.UTF_8), "ISO8859-1"));
             // 设置输出长度
             response.setHeader("Content-Length", String.valueOf(fileLength));
             // 获取输入流
@@ -152,5 +169,45 @@ public class FileController extends BaseController{
         }
     }
 
+
+
+    /**
+    * @Description 导入excel获取数据
+    * @param file
+    * @Return java.util.Map<java.lang.String,java.lang.Object>
+    * @Author wangruwei
+    * @Date 2022/3/16 11:42
+    **/
+    @PostMapping("/excel")
+    public Map<String, Object> acceptByExcel(
+            @RequestParam(value = "file") MultipartFile file
+    ) {
+        Map<String, List<NewOrderExcel>> readOrderInfoFromExcelxls;
+        try {
+
+            long time3 = System.currentTimeMillis();
+
+            //从excel中读取数据
+            long t1 = System.currentTimeMillis();
+            log.debug("excel读取开始,当前时间{}",t1);
+            List<NewOrderExcel> newOrderExcels = excelReadService.readOrderInfoFromExcelxls(file);
+            long t2 = System.currentTimeMillis();
+            log.debug("excel读取开始,当前时间{},耗时:{}",t2,t2-t1);
+            log.info("获取到的实体数据:{}",JsonUtils.getInstance().toJsonString(newOrderExcels));
+
+            //先读取数据，然后进行数据非空校验
+
+
+            return getSussRtn(newOrderExcels.size(), "读取完成,条数:"+newOrderExcels.size());
+
+        } catch (OrderReceiveException e) {
+            log.error("{}excel导入异常:{}", LOGGER_MSG, e);
+            return getFailRtn(e.getMessage());
+        }  catch (Exception e) {
+            log.error("{}excel导入处理异常:{}", LOGGER_MSG, e);
+            return getFailRtn(e.getMessage());
+        }
+
+    }
 
 }
