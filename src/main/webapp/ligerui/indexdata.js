@@ -13,12 +13,18 @@
 	},
     { text: '上传下载',isexpand:false, children: [
 		{url:"file/uploadDown",text:"上传下载文件" },
-		{url:"file/uploadDownExcel",text:"上传处理excel"},
-		{url:"demos/base/drag2.htm",text:"拖动2"},
-		{url:"demos/base/dragresizable.htm",text:"拖动并改变大小"},
-		{url:"demos/base/tip.htm",text:"气泡"},
-		{url:"demos/base/tip2.htm",text:"气泡2"}
+		{url:"file/uploadDownExcel",text:"上传处理excel"}
 	]
+    },
+	{ text: 'linux命令redis',isexpand:false, children: [
+		{url:"linux/batchCommand",text:"批量执行命令" },
+		{url:"linux/nginx",text:"nginx配置" }
+	]
+	},
+    { text: '线程',isexpand:false, children: [
+            {url:"thread/newThread",text:"直接起线程" },
+            {url:"linux/nginx",text:"nginx配置" }
+        ]
     },
     { text: '过滤器', isexpand: false, children: [
 		{ url: "demos/filter/filter.htm", text: "自定义查询" },

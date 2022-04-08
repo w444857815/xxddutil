@@ -130,6 +130,32 @@ public class UrlController {
         return model;
     }
 
+    /**
+     * @Description linux批量执行命令
+     * @Author wangruwei
+     * @Date 2022年4月7日18:16:48
+     **/
+    @GetMapping("/linux/batchCommand")
+    public ModelAndView batchCommand(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/linux/batchCommand");
+
+        return model;
+    }
+
+    /**
+     * @Description nginx配置
+     * @Author wangruwei
+     * @Date 2022年4月7日18:16:48
+     **/
+    @GetMapping("/linux/nginx")
+    public ModelAndView nginx(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/linux/nginx");
+
+        return model;
+    }
+
     @GetMapping("/testredis")
     public String testredis(){
         double hincr = redisService.hincr("110101MYJ2GPQQ4:51", "111020220317", 1);

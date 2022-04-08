@@ -1,7 +1,6 @@
 package com.dxhy.order.service;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.dxhy.order.config.redis.RedisUtil;
 import com.dxhy.order.service.impl.BaseServiceImpl;
 import com.dxhy.order.util.RedisLock;
 import org.slf4j.Logger;
@@ -108,6 +107,7 @@ public class StockService extends BaseServiceImpl {
 
             redisScript.setScriptText(STOCK_LUA);
             logger.info("执行lua脚本减库存开始");
+            //还有参数往后继续加
             result = redisTemplate.execute(redisScript, keys, num+"");
             logger.info("执行lua脚本减库存结束:剩余{}",result);
 
