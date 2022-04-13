@@ -3,13 +3,13 @@ spring:
     #MySQL数据库支持配置
     driver-class-name: com.mysql.cj.jdbc.Driver
     #测试
-    url: jdbc:mysql://10.1.1.224:13600/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-    username: root
-    password: itax1234
+#    url: jdbc:mysql://10.1.1.224:13600/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    username: root
+#    password: itax1234
     #生产
-#    url: jdbc:mysql://10.1.1.224:3306/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-#    username: dxhy
-#    password: Dxhy@123
+    url: jdbc:mysql://10.1.1.224:3306/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: dxhy
+    password: Dxhy@123
   #redis config
   redis:
     host: 10.1.2.37

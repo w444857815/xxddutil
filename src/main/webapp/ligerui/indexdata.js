@@ -22,17 +22,19 @@
 	]
 	},
     { text: '线程',isexpand:false, children: [
-            {url:"thread/newThread",text:"直接起线程" },
-            {url:"linux/nginx",text:"nginx配置" }
+            {url:"threadPage/newThread",text:"直接起线程" },
+            {url:"threadPage/threadPool",text:"线程池" },
+			{url:"threadPage/dengdaiThread",text:"等准备特定数量线程后执行" },
+			{url:"threadPage/countDownThread",text:"等线程都执行完再主线程" }
         ]
     },
-    { text: '过滤器', isexpand: false, children: [
+    { text: '爬虫', isexpand: false, children: [
 		{ url: "demos/filter/filter.htm", text: "自定义查询" },
 		{ url: "demos/filter/filterwin.htm", text: "在窗口显示" },
 		{ url: "demos/filter/grid.htm", text: "配合表格" } 
 	]
     }, 
-	{ text: '弹窗',isexpand:false, children: [ 
+	{ text: 'mongo',isexpand:false, children: [ 
 		{ url: "demos/dialog/dialogAll.htm", text: "弹出框",isnew:true },
         { url: "demos/dialog/dialogParent.htm", text: "子窗口传参", isnew: true },
 		{url:"demos/dialog/dialogTarget.htm",text:"载入目标DIV"},

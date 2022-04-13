@@ -156,6 +156,72 @@ public class UrlController {
         return model;
     }
 
+    /**
+    * @Description 新建线程，直接new
+    * @Author wangruwei
+    * @Date 2022/4/8 13:55
+    **/
+    @GetMapping("/threadPage/newThread")
+    public ModelAndView newThread(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/thread/newThread");
+
+        return model;
+    }
+
+    /**
+    * @Description 简单线程池
+    * @param
+    * @Return org.springframework.web.servlet.ModelAndView
+    * @Author wangruwei
+    * @Date 2022/4/12 18:52
+    **/
+    @GetMapping("/threadPage/threadPool")
+    public ModelAndView threadPool(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/thread/threadPool");
+
+        return model;
+    }
+
+    /**
+    * @Description 等待准备一定线程后一起执行
+    * @Author wangruwei
+    * @Date 2022/4/12 18:52
+    **/
+    @GetMapping("/threadPage/dengdaiThread")
+    public ModelAndView dengdaiThread(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/thread/dengdaiThread");
+
+        return model;
+    }
+
+    /**
+    * @Description 等创建的线程都执行完后，再执行
+    * @Author wangruwei
+    * @Date 2022/4/12 19:51
+    **/
+    @GetMapping("/threadPage/countDownThread")
+    public ModelAndView countDownThread(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/thread/countDownThread");
+
+        return model;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/testredis")
     public String testredis(){
         double hincr = redisService.hincr("110101MYJ2GPQQ4:51", "111020220317", 1);
