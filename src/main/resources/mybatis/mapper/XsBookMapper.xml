@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxhy.order.dao.XsBookMapper" >
+	<resultMap id="BaseResultMap" type="com.dxhy.order.model.XsBook" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="book_name" property="bookName" jdbcType="VARCHAR" />
+		<result column="book_url" property="bookUrl" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+		id,
+		book_name,
+		book_url,
+		create_time
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		select
+		<include refid="Base_Column_List" />
+		from xs_book
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+	delete from xs_book
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+	<insert id="insert" parameterType="com.dxhy.order.model.XsBook" >
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into xs_book (
+		id,
+		book_name,
+		book_url,
+		create_time
+		)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{bookName,jdbcType=VARCHAR},
+		#{bookUrl,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.dxhy.order.model.XsBook" >
+		insert into xs_book
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				id,
+			</if>
+			<if test="bookName != null" >
+				book_name,
+			</if>
+			<if test="bookUrl != null" >
+				book_url,
+			</if>
+			<if test="createTime != null" >
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="bookName != null" >
+				#{bookName,jdbcType=VARCHAR},
+			</if>
+			<if test="bookUrl != null" >
+				#{bookUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null" >
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dxhy.order.model.XsBook" >
+		update xs_book
+		<set >
+			<if test="bookName != null" >
+				book_name = #{bookName,jdbcType=VARCHAR},
+			</if>
+			<if test="bookUrl != null" >
+				book_url = #{bookUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null" >
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dxhy.order.model.XsBook" >
+    update xs_book
+    set
+			book_name = #{bookName,jdbcType=VARCHAR},
+			book_url = #{bookUrl,jdbcType=VARCHAR},
+			create_time = #{createTime,jdbcType=TIMESTAMP}
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from xs_book
+	</select>
+	<delete id="batchDelete">
+	delete from xs_book
+    where id IN (${ids})
+  </delete>
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from xs_book
+		<where>
+			<if test="id != null" >
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="bookUrl != null" >
+				and book_url = #{bookUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null" >
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+	<select id="queryCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		select
+		count(1)
+		from xs_book
+		<include refid="page_where"/>
+	</select>
+	<select id="queryPageResult" resultType="java.util.Map" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from xs_book
+		<include refid="page_where"/>
+		<include refid="page_order"/>
+		<include refid="page_limit"/>
+	</select>
+	<sql  id="page_where">
+		<where>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="bookUrl != null" >
+				and book_url = #{bookUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="createTimeStart != null" >
+				and create_time &gt;= #{createTimeStart}
+			</if>
+			<if test="createTimeEnd != null" >
+				and create_time &lt;= #{createTimeEnd}
+			</if>
+		</where>
+	</sql>
+	<sql  id="page_order">
+		<if test="orderStr != null and orderStr != ''" >
+			order by ${orderStr}
+		</if>
+	</sql>
+	<sql id="page_limit">
+		<if test="curRow!=null and limitSize!='' ">limit #{curRow},#{limitSize}</if>
+	</sql>
+</mapper>

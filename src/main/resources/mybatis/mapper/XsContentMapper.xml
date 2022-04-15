@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxhy.order.dao.XsContentMapper" >
+	<resultMap id="BaseResultMap" type="com.dxhy.order.model.XsContent" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="book_id" property="bookId" jdbcType="VARCHAR" />
+		<result column="book_name" property="bookName" jdbcType="VARCHAR" />
+		<result column="zj_order" property="zjOrder" jdbcType="INTEGER" />
+		<result column="zj_title" property="zjTitle" jdbcType="VARCHAR" />
+		<result column="zj_url" property="zjUrl" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="is_suc" property="isSuc" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+		id,
+		book_id,
+		book_name,
+		zj_order,
+		zj_title,
+		zj_url,
+		content,
+		is_suc,
+		create_time
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		select
+		<include refid="Base_Column_List" />
+		from xs_content
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+	delete from xs_content
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+	<insert id="insert" parameterType="com.dxhy.order.model.XsContent" >
+		<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into xs_content (
+		id,
+		book_id,
+		book_name,
+		zj_order,
+		zj_title,
+		zj_url,
+		content,
+		is_suc,
+		create_time
+		)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{bookId,jdbcType=VARCHAR},
+		#{bookName,jdbcType=VARCHAR},
+		#{zjOrder,jdbcType=INTEGER},
+		#{zjTitle,jdbcType=VARCHAR},
+		#{zjUrl,jdbcType=VARCHAR},
+		#{content,jdbcType=LONGVARCHAR},
+		#{isSuc,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.dxhy.order.model.XsContent" >
+		insert into xs_content
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				id,
+			</if>
+			<if test="bookId != null" >
+				book_id,
+			</if>
+			<if test="bookName != null" >
+				book_name,
+			</if>
+			<if test="zjOrder != null" >
+				zj_order,
+			</if>
+			<if test="zjTitle != null" >
+				zj_title,
+			</if>
+			<if test="zjUrl != null" >
+				zj_url,
+			</if>
+			<if test="content != null" >
+				content,
+			</if>
+			<if test="isSuc != null" >
+				is_suc,
+			</if>
+			<if test="createTime != null" >
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="bookId != null" >
+				#{bookId,jdbcType=VARCHAR},
+			</if>
+			<if test="bookName != null" >
+				#{bookName,jdbcType=VARCHAR},
+			</if>
+			<if test="zjOrder != null" >
+				#{zjOrder,jdbcType=INTEGER},
+			</if>
+			<if test="zjTitle != null" >
+				#{zjTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="zjUrl != null" >
+				#{zjUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null" >
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isSuc != null" >
+				#{isSuc,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null" >
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.dxhy.order.model.XsContent" >
+		update xs_content
+		<set >
+			<if test="bookId != null" >
+				book_id = #{bookId,jdbcType=VARCHAR},
+			</if>
+			<if test="bookName != null" >
+				book_name = #{bookName,jdbcType=VARCHAR},
+			</if>
+			<if test="zjOrder != null" >
+				zj_order = #{zjOrder,jdbcType=INTEGER},
+			</if>
+			<if test="zjTitle != null" >
+				zj_title = #{zjTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="zjUrl != null" >
+				zj_url = #{zjUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null" >
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isSuc != null" >
+				is_suc = #{isSuc,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null" >
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.dxhy.order.model.XsContent" >
+    update xs_content
+    set
+			book_id = #{bookId,jdbcType=VARCHAR},
+			book_name = #{bookName,jdbcType=VARCHAR},
+			zj_order = #{zjOrder,jdbcType=INTEGER},
+			zj_title = #{zjTitle,jdbcType=VARCHAR},
+			zj_url = #{zjUrl,jdbcType=VARCHAR},
+			content = #{content,jdbcType=LONGVARCHAR},
+			is_suc = #{isSuc,jdbcType=VARCHAR},
+			create_time = #{createTime,jdbcType=TIMESTAMP}
+     where id = #{id,jdbcType=VARCHAR}
+  </update>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from xs_content
+	</select>
+	<delete id="batchDelete">
+	delete from xs_content
+    where id IN (${ids})
+  </delete>
+	<select id="selectByCondition" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from xs_content
+		<where>
+			<if test="id != null" >
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="bookId != null" >
+				and book_id = #{bookId,jdbcType=VARCHAR}
+			</if>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="zjOrder != null" >
+				and zj_order = #{zjOrder,jdbcType=INTEGER}
+			</if>
+			<if test="zjTitle != null" >
+				and zj_title = #{zjTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="zjUrl != null" >
+				and zj_url = #{zjUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="content != null" >
+				and content = #{content,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="isSuc != null" >
+				and is_suc = #{isSuc,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null" >
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+	<select id="queryCount" resultType="java.lang.Long" parameterType="java.util.Map">
+		select
+		count(1)
+		from xs_content
+		<include refid="page_where"/>
+	</select>
+	<select id="queryPageResult" resultType="java.util.Map" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from xs_content
+		<include refid="page_where"/>
+		<include refid="page_order"/>
+		<include refid="page_limit"/>
+	</select>
+	<sql  id="page_where">
+		<where>
+			<if test="bookId != null" >
+				and book_id = #{bookId,jdbcType=VARCHAR}
+			</if>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="zjOrder != null" >
+				and zj_order = #{zjOrder,jdbcType=INTEGER}
+			</if>
+			<if test="zjTitle != null" >
+				and zj_title = #{zjTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="zjUrl != null" >
+				and zj_url = #{zjUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="content != null" >
+				and content = #{content,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="isSuc != null" >
+				and is_suc = #{isSuc,jdbcType=VARCHAR}
+			</if>
+			<if test="createTimeStart != null" >
+				and create_time &gt;= #{createTimeStart}
+			</if>
+			<if test="createTimeEnd != null" >
+				and create_time &lt;= #{createTimeEnd}
+			</if>
+		</where>
+	</sql>
+	<sql  id="page_order">
+		<if test="orderStr != null and orderStr != ''" >
+			order by ${orderStr}
+		</if>
+	</sql>
+	<sql id="page_limit">
+		<if test="curRow!=null and limitSize!='' ">limit #{curRow},#{limitSize}</if>
+	</sql>
+</mapper>

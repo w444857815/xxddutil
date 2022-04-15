@@ -78,3 +78,6 @@ mail:
     hostport: 465
     auth: true
     smtpname: SMTPS
+#电子书储存路径
+dzs:
+  path: /root/dzsFiles

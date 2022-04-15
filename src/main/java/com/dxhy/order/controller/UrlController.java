@@ -210,9 +210,20 @@ public class UrlController {
         return model;
     }
 
+    /**
+    * @Description TODO
+    * @param null
+    * @Return
+    * @Author wangruwei
+    * @Date 2022/4/13 11:34
+    **/
+    @GetMapping("/JsoupPage/JsoupManage")
+    public ModelAndView JsoupManage(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/jsoup/JsoupManage");
 
-
-
+        return model;
+    }
 
 
 

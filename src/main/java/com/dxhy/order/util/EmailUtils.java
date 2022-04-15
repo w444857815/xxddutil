@@ -11,7 +11,7 @@ public class EmailUtils {
 		System.out.println(validateEmail("444857815@qq1.com"));
 	}
 	/**
-	 * 验证邮箱的合法性
+	 * 验证邮箱的合法性,true代表正确，false代表格式不对
 	 * @param email
 	 * @return
 	 */

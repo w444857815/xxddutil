@@ -307,6 +307,12 @@ public class SendMailUtil {
         //如果有附件,此处例子2个，第一个jpg，第二个txt
         filesList.add(new File(FileUtil.getResourcePath()+"temp/图片附件.jpg"));
         filesList.add(new File(FileUtil.getResourcePath()+"temp/txt文本.txt"));
+        //从传来的值里面获取服务器位置上的文件
+        if(!CollectionUtils.isEmpty(content.getFjFiles())){
+            for (int i = 0; i < content.getFjFiles().size() ; i++) {
+                filesList.add(new File(content.getFjFiles().get(i)));
+            }
+        }
 
 
         Map<String, String> sendEmail = sendEmail(content.isIF_NEED_ACCOUNT(),

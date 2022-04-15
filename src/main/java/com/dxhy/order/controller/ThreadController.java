@@ -80,7 +80,7 @@ public class ThreadController extends BaseController{
         //执行线程
         log.info("放入线程池执行");
         for (int i = 0; i < 40; i++) {
-            PrintDateThread printDateThread = new PrintDateThread(str);
+            PrintDateThread printDateThread = new PrintDateThread(str+i);
             executorService.submit(printDateThread);
         }
         log.info("放入线程池完成");
@@ -118,7 +118,7 @@ public class ThreadController extends BaseController{
 
 
     /**
-     * @Description 等待创建完特定数量20个线程后再执行
+     * @Description 等待创建完特定数量20个线程后再执行---线程池
      * @param
      * @Return java.util.Map<java.lang.String,java.lang.Object>
      * @Author wangruwei

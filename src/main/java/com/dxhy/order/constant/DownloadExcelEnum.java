@@ -12,7 +12,7 @@ public enum DownloadExcelEnum {
 
     EXCEL_ORDER_IMPORT("orderImportExcel.xlsx", "订单导入模板.xlsx"),
 
-    LOGO("logo.png", "logo.png"),
+    LOGO("logo.jpg", "logo.jpg"),
 
     /**
      * Excel导出模板

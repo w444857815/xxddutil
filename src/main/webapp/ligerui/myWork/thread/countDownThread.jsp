@@ -52,8 +52,8 @@
 </head>
 <body>
     <h1>目的:for里循环太慢，放入线程，但又要用每一个执行完后返回的数据。例如开票for，后续用处理完的开票数据list</h1>
-    <h2>就像开王者一样，所有人都准备(单人线程)了，主线程才开始游戏</h2>
-    <h3>CountDownLauth和CyclicBarrier区别是，前者会执行完线程里的，然后执行主线程。后者不执行线程里方法，直到准备一定数量后一起</h3>
+    <h2>就像开王者一样，所有人都准备(单人线程)了，主线程才开始游戏(也可专门放一个线程去等待，主线程继续往下走)</h2>
+    <h3>CountDownLauth和CyclicBarrier区别是，前者会执行完线程里的，然后执行主线程。后者不执行线程里方法，直到准备一定数量后一起。前在主线程await，后在线程里await</h3>
     步骤:<br>
     ①List<CommonOrder> list = new LinkedList<CommonOrder>();<br>
         fori{<br>
