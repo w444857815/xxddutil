@@ -19,4 +19,5 @@ public interface XsBookMapper {
 
     int updateByPrimaryKey(Article record);
 
+    List<XsBook> selectByCondition(XsBook book);
 }

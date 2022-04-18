@@ -15,4 +15,6 @@ import java.util.List;
 public interface XsBookService {
 
     int insertSelective(XsBook book);
+
+    List<XsBook> selectByCondition(XsBook book);
 }

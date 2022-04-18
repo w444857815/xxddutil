@@ -68,7 +68,7 @@ public class ThreadController extends BaseController{
     }
 
     /**
-    * @Description 简单线程池
+    * @Description 简单线程池,先放入线程池里的执行完，后放进去的才可以有资源去执行。
     * @Author wangruwei
     * @Date 2022/4/12 17:30
     **/

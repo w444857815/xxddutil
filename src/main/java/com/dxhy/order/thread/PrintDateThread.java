@@ -28,7 +28,11 @@ public class PrintDateThread implements Runnable {
 
     @Override
     public void run() {
-
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         log.info("获取主线程传来的参数:{},线程的日期:{}",jsonStr, DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss SSS"));
 
     }

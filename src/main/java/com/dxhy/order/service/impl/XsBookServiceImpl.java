@@ -32,4 +32,9 @@ public class XsBookServiceImpl implements XsBookService {
         int i = xsBookMapper.insertSelective(book);
         return i;
     }
+
+    @Override
+    public List<XsBook> selectByCondition(XsBook book) {
+        return xsBookMapper.selectByCondition(book);
+    }
 }

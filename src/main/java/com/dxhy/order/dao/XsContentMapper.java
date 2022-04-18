@@ -3,6 +3,9 @@ package com.dxhy.order.dao;
 import com.dxhy.order.model.Article;
 import com.dxhy.order.model.XsBook;
 import com.dxhy.order.model.XsContent;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface XsContentMapper {
     int deleteByPrimaryKey(Integer id);
@@ -17,4 +20,11 @@ public interface XsContentMapper {
 
     int updateByPrimaryKey(Article record);
 
+    List<XsContent> selectByCondition(XsContent xscon);
+
+    int selectCountByCondition(XsContent xscon);
+
+    List<XsContent> selectByConditionNoCon(XsContent conParams);
+
+    List<XsContent> selectByUrls(@Param("list") List<String> list);
 }

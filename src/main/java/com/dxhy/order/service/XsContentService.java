@@ -4,6 +4,8 @@ package com.dxhy.order.service;
 import com.dxhy.order.model.XsBook;
 import com.dxhy.order.model.XsContent;
 
+import java.util.List;
+
 /**
  * @author ：杨士勇
  * @ClassName ：ApiOrderInfoService
@@ -15,4 +17,12 @@ public interface XsContentService {
     int insertSelective(XsContent xsContent);
 
     int updateByPrimaryKeySelective(XsContent con);
+
+    List<XsContent> selectByCondition(XsContent xscon);
+
+    int selectCountByCondition(XsContent xscon);
+
+    List<XsContent> selectByConditionNoCon(XsContent conParams);
+
+    List<XsContent> selectByUrls(List<String> jsoupUrlList);
 }

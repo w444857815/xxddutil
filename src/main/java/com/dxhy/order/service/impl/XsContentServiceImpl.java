@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class XsContentServiceImpl implements XsContentService {
@@ -28,5 +30,25 @@ public class XsContentServiceImpl implements XsContentService {
     @Override
     public int updateByPrimaryKeySelective(XsContent con) {
         return XsContentMapper.updateByPrimaryKeySelective(con);
+    }
+
+    @Override
+    public List<XsContent> selectByCondition(XsContent xscon) {
+        return XsContentMapper.selectByCondition(xscon);
+    }
+
+    @Override
+    public int selectCountByCondition(XsContent xscon) {
+        return XsContentMapper.selectCountByCondition(xscon);
+    }
+
+    @Override
+    public List<XsContent> selectByConditionNoCon(XsContent conParams) {
+        return XsContentMapper.selectByConditionNoCon(conParams);
+    }
+
+    @Override
+    public List<XsContent> selectByUrls(List<String> jsoupUrlList) {
+        return XsContentMapper.selectByUrls(jsoupUrlList);
     }
 }

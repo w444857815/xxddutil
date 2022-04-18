@@ -173,6 +173,40 @@
 	delete from xs_content
     where id IN (${ids})
   </delete>
+	<select id="selectCountByCondition" resultType="int">
+		select
+		count(*)
+		from xs_content
+		<where>
+			<if test="id != null" >
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="bookId != null" >
+				and book_id = #{bookId,jdbcType=VARCHAR}
+			</if>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="zjOrder != null" >
+				and zj_order = #{zjOrder,jdbcType=INTEGER}
+			</if>
+			<if test="zjTitle != null" >
+				and zj_title = #{zjTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="zjUrl != null" >
+				and zj_url = #{zjUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="content != null" >
+				and content = #{content,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="isSuc != null" >
+				and is_suc = #{isSuc,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null" >
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
 	<select id="selectByCondition" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -206,6 +240,39 @@
 				and create_time = #{createTime,jdbcType=TIMESTAMP}
 			</if>
 		</where>
+		order by zj_order
+	</select>
+	<select id="selectByConditionNoCon" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from xs_content
+		<where>
+			<if test="id != null" >
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="bookId != null" >
+				and book_id = #{bookId,jdbcType=VARCHAR}
+			</if>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="zjOrder != null" >
+				and zj_order = #{zjOrder,jdbcType=INTEGER}
+			</if>
+			<if test="zjTitle != null" >
+				and zj_title = #{zjTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="zjUrl != null" >
+				and zj_url = #{zjUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="isSuc != null" >
+				and is_suc = #{isSuc,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null" >
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		order by zj_order
 	</select>
 	<select id="queryCount" resultType="java.lang.Long" parameterType="java.util.Map">
 		select
@@ -220,6 +287,21 @@
 		<include refid="page_where"/>
 		<include refid="page_order"/>
 		<include refid="page_limit"/>
+	</select>
+	<select id="selectByUrls" resultType="com.dxhy.order.model.XsContent">
+		select
+		<include refid="Base_Column_List" />
+		from xs_content
+		where 1=1
+		
+		<if test="list != null and list.size() > 0">
+			and zj_url in
+			<foreach collection="list" index="index" item="url"
+					 open="(" separator="," close=")">
+				#{url}
+			</foreach>
+		</if>
+
 	</select>
 	<sql  id="page_where">
 		<where>
