@@ -135,7 +135,7 @@ public class SqlExecuteController extends BaseController{
     @RequestMapping(value="/ofd")
     @ResponseBody
     public Map<String,Object> ofd() throws IOException {
-        OfdConver.toPng("/root/uploadFiles/hh.ofd", "/root/uploadFiles/", "aa");
+        //OfdConver.toPng("/root/uploadFiles/hh.ofd", "/root/uploadFiles/", "aa");
         return null;
     }
 
