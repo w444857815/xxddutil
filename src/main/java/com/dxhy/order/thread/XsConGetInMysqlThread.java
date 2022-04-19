@@ -1,12 +1,7 @@
 package com.dxhy.order.thread;
 
 import com.dxhy.order.model.XsContent;
-import com.dxhy.order.service.ApiWankeService;
 import com.dxhy.order.service.XsContentService;
-import com.dxhy.order.util.JsonUtils;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,10 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
 
 import static com.sun.webkit.network.URLs.newURL;
 

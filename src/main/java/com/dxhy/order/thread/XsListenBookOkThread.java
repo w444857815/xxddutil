@@ -3,21 +3,14 @@ package com.dxhy.order.thread;
 import com.dxhy.order.controller.MailController;
 import com.dxhy.order.model.XsContent;
 import com.dxhy.order.service.XsContentService;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
 
 /**
  * @ClassName 监听，当所有线程都跑完后，生成书，并发送。
@@ -138,27 +131,6 @@ public class XsListenBookOkThread implements Runnable {
         mail.emailSendForm(fileName+" 下载成功", "附件中可下载，欢迎后续使用，如有需要联系444857815@qq.com", emailAddress, "", "海洋小助手",xiaoshuoFile , false);
     }
 
-
-    private String getHtml(String webUrl) throws IOException {
-        int waitTime = 15000;
-        //构造一个webClient 模拟Chrome 浏览器
-        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3);
-        //屏蔽日志信息
-        java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
-        //支持JavaScript
-        webClient.setJavaScriptEnabled(true);
-        webClient.setCssEnabled(false);
-        webClient.setActiveXNative(false);
-        webClient.setCssEnabled(false);
-        webClient.setThrowExceptionOnScriptError(false);
-        webClient.setThrowExceptionOnFailingStatusCode(false);
-        webClient.setTimeout(waitTime);
-        HtmlPage rootPage = webClient.getPage(webUrl);
-        //设置一个运行JavaScript的时间
-        webClient.waitForBackgroundJavaScript(waitTime);
-        webClient.closeAllWindows();
-        return rootPage.asXml();
-    }
 
 }
 

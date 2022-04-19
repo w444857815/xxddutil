@@ -151,8 +151,8 @@
 
              #负载地址
              upstream slAccept {#税控接口
-                      server 10.0.0.24:9077; #invoice-accept所在位置
-                      server 10.0.0.24:9177;
+                      server 10.0.0.24:9077 weight=1; #invoice-accept所在位置
+                      server 10.0.0.24:9177 weight=2; #权重越高给他访问量越大
              }
 
             #ljfldq

@@ -25,15 +25,29 @@
     </properties>
 
     <dependencies>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <!--<exclusions> &lt;!&ndash; 去掉springboot自带的日志 &ndash;&gt;
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions> <!-- 去掉springboot自带的日志 -->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
                 </exclusion>
-            </exclusions>-->
+            </exclusions>
+        </dependency>
+
+        <!--war包启动时候报错， 去掉log4j依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -180,11 +194,19 @@
             <version>5.5.7</version>
         </dependency>
 
+        <!--war包启动时候报错， 去掉log4j依赖-->
         <dependency>
             <groupId>org.ofdrw</groupId>
             <artifactId>ofdrw-full</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+            </exclusions>
             <version>1.8.6</version>
         </dependency>
+
 
         <!--处理时间-->
         <dependency>

@@ -1,25 +1,16 @@
 package com.dxhy.order.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.dxhy.order.model.OrderInfo;
 import com.dxhy.order.model.XsBook;
 import com.dxhy.order.model.XsContent;
 import com.dxhy.order.service.ApiWankeService;
 import com.dxhy.order.service.XsBookService;
 import com.dxhy.order.service.XsContentService;
-import com.dxhy.order.thread.*;
-import com.dxhy.order.util.ConnectAdslNet;
+import com.dxhy.order.thread.XsConGetInMysqlThread;
+import com.dxhy.order.thread.XsConLastGetThread;
+import com.dxhy.order.thread.XsListenBookOkThread;
 import com.dxhy.order.util.EmailUtils;
-import com.dxhy.order.util.JsonUtils;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -36,13 +27,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static com.sun.webkit.network.URLs.newURL;
@@ -126,8 +118,8 @@ public class JsoupController extends BaseController{
             String savePath = dzsPath+fileName+".txt";
             File file = new File(savePath);
             //优化，判断是否需要删
-            if(file.exists()){
-                file.delete();
+            if(!file.exists()){
+                file.createNewFile();
             }
             XsBook book = new XsBook();
             book.setBookUrl(webUrl);
@@ -217,7 +209,9 @@ public class JsoupController extends BaseController{
                     Element a = childElements.get(0).children().get(i).getAllElements().select("a").first();
                     if(ObjectUtil.isNotNull(a)){
                         conUrl = childElements.get(0).children().get(i).getElementsByTag("a").first().attr("abs:href");
-                        jsoupUrlList.add(conUrl);
+                        if(!jsoupUrlList.contains(conUrl)){
+                            jsoupUrlList.add(conUrl);
+                        }
                     }
                 }
                 //获取库中没有的数据
@@ -279,6 +273,7 @@ public class JsoupController extends BaseController{
         //getHtml(webUrl);
 
         //getdata(webUrl);
+        File file = new File("E://aaa.txt");
 
         if(true){
             return;

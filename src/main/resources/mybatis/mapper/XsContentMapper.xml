@@ -244,7 +244,8 @@
 	</select>
 	<select id="selectByConditionNoCon" resultMap="BaseResultMap">
 		select
-		<include refid="Base_Column_List" />
+		<!--<include refid="Base_Column_List" />-->
+		zj_url
 		from xs_content
 		<where>
 			<if test="id != null" >
@@ -293,7 +294,11 @@
 		<include refid="Base_Column_List" />
 		from xs_content
 		where 1=1
-		
+
+		<if test="list != null and list.size() == 0">
+		and 1=2
+		</if>
+
 		<if test="list != null and list.size() > 0">
 			and zj_url in
 			<foreach collection="list" index="index" item="url"

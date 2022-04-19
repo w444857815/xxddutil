@@ -22,3 +22,5 @@ server:
   servlet:
     context-path: /order-api
   max-http-header-size: 4048576
+logging:
+  config: classpath:logback-spring.xml
