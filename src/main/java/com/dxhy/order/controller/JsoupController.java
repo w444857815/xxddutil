@@ -1,5 +1,6 @@
 package com.dxhy.order.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.dxhy.order.model.XsBook;
 import com.dxhy.order.model.XsContent;
@@ -265,6 +266,17 @@ public class JsoupController extends BaseController{
     }
 
     public static void main(String[] args) throws Exception {
+
+        List<String> list = new LinkedList<String>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+        String aaa = CollectionUtils.firstElement(Arrays.asList("c"));
+        String hehe = CollectionUtils.lastElement(Arrays.asList("c"));
+        System.out.println(aaa);
+
+
         //String webUrl = "http://www.baidu.com";
         //String webUrl = "http://www.twxs8.com/5_5518/";
         String webUrl = "http://www.twxs8.com/5_5518/";

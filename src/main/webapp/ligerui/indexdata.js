@@ -29,9 +29,7 @@
         ]
     },
     { text: '爬虫', isexpand: false, children: [
-		{ url: "JsoupPage/JsoupManage", text: "爬虫处理界面" },
-		{ url: "demos/filter/filterwin.htm", text: "在窗口显示" },
-		{ url: "demos/filter/grid.htm", text: "配合表格" } 
+		{ url: "JsoupPage/JsoupManage", text: "爬虫获取小说" }
 	]
     }, 
 	{ text: 'mongo',isexpand:false, children: [ 
