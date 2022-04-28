@@ -37,6 +37,11 @@
 
         }
 
+        function qingkong(){
+            $('#songName').val('');
+            $('#jianjie').val('');
+        }
+
     </script>
     <style>
         /* 小屏幕手机端 */
@@ -69,7 +74,7 @@
 </head>
 <body>
 
-    输入名称:<input id="songName"/>
+    输入名称:<input id="songName"/>  <input value="清空" onclick="qingkong()" type="button">
 <br>
     输入描述:<textarea rows="5" cols="20" id="jianjie"></textarea><br>
     <input type="button" value="提交" style="width: 150px;height: 60px;" onclick="zhuanJson()"/><br>

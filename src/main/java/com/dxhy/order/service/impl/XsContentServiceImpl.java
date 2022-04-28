@@ -51,4 +51,9 @@ public class XsContentServiceImpl implements XsContentService {
     public List<XsContent> selectByUrls(List<String> jsoupUrlList) {
         return XsContentMapper.selectByUrls(jsoupUrlList);
     }
+
+    @Override
+    public XsContent selectLastZjByConditionNoCon(XsContent conParams) {
+        return XsContentMapper.selectLastZjByConditionNoCon(conParams);
+    }
 }

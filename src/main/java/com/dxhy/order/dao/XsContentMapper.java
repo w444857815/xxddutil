@@ -27,4 +27,6 @@ public interface XsContentMapper {
     List<XsContent> selectByConditionNoCon(XsContent conParams);
 
     List<XsContent> selectByUrls(@Param("list") List<String> list);
+
+    XsContent selectLastZjByConditionNoCon(XsContent conParams);
 }

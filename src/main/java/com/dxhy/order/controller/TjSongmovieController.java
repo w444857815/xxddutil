@@ -56,13 +56,13 @@ public class TjSongmovieController extends BaseController {
 		song.setSongName(songName.trim());
 		List<TjSongmovie> tjSongmovies = tjSongMovieService.selectByCondition(song);
 		if(tjSongmovies.size()>0){
-			return getFailRtn("已经存在此歌或电影");
+			return getFailRtn("已经存在此歌或电影:"+songName);
 		}
 		song.setJianjie(jianjie);
 		song.setCreateTime(new Date());
 		int i = tjSongMovieService.insertSelective(song);
 		if(i>0){
-			return getSussRtn("记录成功", "记录成功");
+			return getSussRtn("记录成功", "记录成功:"+songName);
 		}else{
 			return getFailRtn("入库失败");
 		}

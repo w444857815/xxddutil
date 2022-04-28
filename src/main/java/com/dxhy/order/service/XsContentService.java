@@ -25,4 +25,6 @@ public interface XsContentService {
     List<XsContent> selectByConditionNoCon(XsContent conParams);
 
     List<XsContent> selectByUrls(List<String> jsoupUrlList);
+
+    XsContent selectLastZjByConditionNoCon(XsContent conParams);
 }

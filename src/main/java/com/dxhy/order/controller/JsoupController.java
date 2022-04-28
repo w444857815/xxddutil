@@ -57,10 +57,14 @@ public class JsoupController extends BaseController{
 
     private static int waitTime = 5000;
 
-    private static String basePath = "http://www.twxs8.com";
 
     @Value("${dzs.path}")
     private String dzsPath;
+
+    //章节储存位置
+    @Value("${dzs.conPath}")
+    private String conPath;
+
 
     @Autowired
     private XsBookService xsBookService;
@@ -99,6 +103,14 @@ public class JsoupController extends BaseController{
 
         String fileName = UUID.randomUUID().toString().replaceAll("-", "");
         try {
+            String basePath = "http://www.twxs8.com";
+
+            String proxyUrl = "8.142.64.80:8090/wqx/";
+
+            //替換代理ip
+            //basePath = basePath.replace("www.twxs8.com", "8.142.64.80:8090/wqx/");
+            webUrl = webUrl.replace("www.twxs8.com", "8.142.64.80:8090/wqx/");
+
             String htmlStr = getHtml(webUrl);
             //String htmlStr = FileUtils.readFileToString(new File("E://xx.txt"), "UTF-8");
             log.info("获取html成功，开始读取章节");
@@ -126,10 +138,20 @@ public class JsoupController extends BaseController{
             book.setBookUrl(webUrl);
             //如果库中有书，往后补，如果没有，创建。
             List<XsBook> bookList = xsBookService.selectByCondition(book);
+            //入库 XsBook表
+            String bookId = "";
+            int lastOrder = -1;
             if(CollectionUtils.isEmpty(bookList)){
-                log.info("没有书，直接创建，爬取，生成");
-                //入库 XsBook表
-                String bookId = UUID.randomUUID().toString().replace("-", "");
+                log.info("没有书，直接创建，爬取，生成。创建章节目录");
+                bookId = UUID.randomUUID().toString().replace("-", "");
+
+                String conFolderPath = conPath+bookId;
+                log.info("通过书创建的路径是:{}"+conFolderPath);
+                File zjConFolder = new File(conFolderPath);
+                if(!zjConFolder.exists()){
+                    zjConFolder.mkdir();
+                }
+
                 book.setId(bookId);
                 book.setBookName(fileName);
 
@@ -140,7 +162,7 @@ public class JsoupController extends BaseController{
                 CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
 
                 //设置一个监听线程，当所有爬取动作都跑完后，生成书，发邮件
-                XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId);
+                XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conPath);
                 Thread runThread = new Thread(listenThread);
                 runThread.start();
 
@@ -155,6 +177,7 @@ public class JsoupController extends BaseController{
                     }
                     log.info(title+"*"+conUrl);
                     if(StringUtils.isNotEmpty(conUrl)){
+                        conUrl = replaceTrueUrl(conUrl,proxyUrl);
                         log.info("入库操作");
                         XsContent con = new XsContent();
                         String xsConid = UUID.randomUUID().toString().replace("-", "");
@@ -169,69 +192,91 @@ public class JsoupController extends BaseController{
                         xsContentService.insertSelective(con);
 
                         log.info("线程爬取操作");
-                        XsConGetInMysqlThread conCl = new XsConGetInMysqlThread(xsConid,conUrl,contentId,i,xsContentService,downLatch);
+                        XsConGetInMysqlThread conCl = new XsConGetInMysqlThread(xsConid,conUrl,contentId,i,xsContentService,downLatch,conFolderPath);
                         executorService.submit(conCl);
+                        long sleep = new Random().nextInt(10)*1000;
+                        Thread.sleep(sleep);
                         //Thread conThread = new Thread(conCl);
                         //conThread.start();
                     }
-
-
-
-                /*FileUtils.writeStringToFile(new File(savePath), " "+title+"\n\t","UTF-8",true);
-                //根据文章详情conUrl获取详情
-                if(StringUtils.isNotEmpty(conUrl)){
-
-                    //获取文章页的全部数据
-                    String conHtmlStr = getHtml(conUrl);
-                    Document contentDoc = Jsoup.parse(conHtmlStr);
-                    //详情的内容
-                    String content = contentDoc.getElementById(contentId).text();
-                    log.info(content);
-                    FileUtils.writeStringToFile(new File(savePath), "    "+content+"\n\t","UTF-8",true);
-                }*/
-                    //if(i==3){
-                    //    break;
-                    //}
-
                 }
                 executorService.shutdown();
+                downLatch.await();
             }else{
                 log.info("此书已经有，把没有爬取到的继续爬取");
-                String bookId = bookList.get(0).getId();
+                bookId = bookList.get(0).getId();
+                String conFolderPath = conPath+bookId;
                 XsContent conParams = new XsContent();
                 conParams.setBookId(bookId);
-                List<XsContent> xsContentList = xsContentService.selectByConditionNoCon(conParams);
+                //找到最后一个章节
+                XsContent lastContent = xsContentService.selectLastZjByConditionNoCon(conParams);
+                String lastUrl = lastContent.getZjUrl();
+                lastOrder = lastContent.getZjOrder();
                 //获取库中url集合
-                List<String> sqlurlList = xsContentList.parallelStream().map(XsContent::getZjUrl).distinct().collect(Collectors.toList());
+                //List<String> sqlurlList = xsContentList.parallelStream().map(XsContent::getZjUrl).distinct().collect(Collectors.toList());
                 //爬取的章节列表
                 List<String> jsoupUrlList = new LinkedList<>();
+                Map<String,String> urlMap = new HashMap<String,String>();
                 for (int i = 0; i <childElements.get(0).children().size() ; i++) {
                     String conUrl = "";
                     Element a = childElements.get(0).children().get(i).getAllElements().select("a").first();
                     if(ObjectUtil.isNotNull(a)){
                         conUrl = childElements.get(0).children().get(i).getElementsByTag("a").first().attr("abs:href");
                         if(!jsoupUrlList.contains(conUrl)){
+                            conUrl = replaceTrueUrl(conUrl, proxyUrl);
                             jsoupUrlList.add(conUrl);
+                            urlMap.put(conUrl, a.text());
                         }
                     }
                 }
-                //获取库中没有的数据
-                jsoupUrlList.removeAll(sqlurlList);
-                //新更新的章节
-                List<XsContent> newConList = xsContentService.selectByUrls(jsoupUrlList);
-                CountDownLatch lastdownLatch = new CountDownLatch(newConList.size());
-                for (int i = 0; i < newConList.size(); i++) {
-                    //新开多线程去爬取失败的。
-                    XsConLastGetThread last = new XsConLastGetThread(newConList.get(i).getId(), newConList.get(i).getZjUrl(), contentId, xsContentList.size()+newConList.get(i).getZjOrder(), xsContentService,lastdownLatch);
-                    Thread lastThread = new Thread(last);
-                    lastThread.start();
+                log.info("倒叙爬取的章节，然后匹配库中最后一条");
+                Collections.reverse(jsoupUrlList);
+                List<String> newzjlist = new LinkedList<String>();
+                for (int i = 0; i < jsoupUrlList.size(); i++) {
+                    //如果匹配上了，跳出去
+                    if(jsoupUrlList.get(i).equals(lastUrl)){
+                        break;
+                    }else{
+                        //没有匹配上都是新章节
+                        newzjlist.add(jsoupUrlList.get(i));
+                    }
                 }
-                lastdownLatch.await();
-                //新的爬取完，发邮件
-                XsContent xscon = new XsContent();
-                xscon.setBookId(bookId);
-                createFileAndSendMail(xscon,savePath,new MailController(),fileName,emailAddress);
+
+                Collections.reverse(newzjlist);
+                ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+                CountDownLatch downLatch = new CountDownLatch(newzjlist.size());
+                for (int i = 0; i < newzjlist.size(); i++) {
+                    log.info("入库操作");
+                    XsContent con = new XsContent();
+                    String xsConid = UUID.randomUUID().toString().replace("-", "");
+                    con.setId(xsConid);
+                    con.setBookId(bookId);
+                    con.setBookName(fileName);
+                    con.setZjOrder(lastOrder+i+1);
+                    con.setZjTitle(urlMap.get(newzjlist.get(i)));
+                    con.setZjUrl(newzjlist.get(i));
+                    con.setIsSuc("0");
+                    con.setCreateTime(new Date());
+                    xsContentService.insertSelective(con);
+
+                    log.info("线程爬取操作");
+                    XsConGetInMysqlThread conCl = new XsConGetInMysqlThread(xsConid,newzjlist.get(i),contentId,i,xsContentService,downLatch,conFolderPath);
+                    executorService.submit(conCl);
+                }
+                executorService.shutdown();
+
+                downLatch.await();
+
+
             }
+
+
+            //新的章节爬取完，发邮件
+            XsContent xscon = new XsContent();
+            xscon.setBookId(bookId);
+            xscon.setZjOrder(lastOrder);
+            createFileAndSendMail(xscon,savePath,fileName,emailAddress);
 
 
             log.info("走完");
@@ -250,11 +295,18 @@ public class JsoupController extends BaseController{
     }
 
 
-    private void createFileAndSendMail(XsContent xscon, String savePath, MailController mail, String fileName, String emailAddress) throws IOException {
+    private void createFileAndSendMail(XsContent xscon, String savePath,  String fileName, String emailAddress) throws IOException {
+        MailController mail = new MailController();
         xscon.setIsSuc("1");
         List<XsContent> conList = xsContentService.selectByCondition(xscon);
         for (int i = 0; i < conList.size(); i++) {
-            FileUtils.writeStringToFile(new File(savePath), " "+conList.get(i).getZjTitle()+"\n\t" + "    "+conList.get(i).getContent()+"\n\t","UTF-8",true);
+            String fileContent = "";
+            try {
+                fileContent = FileUtils.readFileToString(new File(conList.get(i).getContent()), "UTF-8");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            FileUtils.writeStringToFile(new File(savePath), " "+conList.get(i).getZjTitle()+"\n\t" + "    "+fileContent+"\n\t","UTF-8",true);
         }
 
         //生成书以后，记录下现在最大的order是多少。下次查询就从这个书往后查,线程外面的for里的order需要设置下
@@ -265,7 +317,21 @@ public class JsoupController extends BaseController{
         mail.emailSendForm(fileName+" 下载成功", "附件中可下载，欢迎后续使用，如有需要联系444857815@qq.com", emailAddress, "", "海洋小助手",xiaoshuoFile , false);
     }
 
+
+    public static String replaceTrueUrl(String getUrl,String proxyUrl){
+        String basePath = "www.twxs8.com";
+        return getUrl.replace(basePath, proxyUrl);
+    }
+
     public static void main(String[] args) throws Exception {
+        String basePath = "http://www.twxs8.com";
+        String webUrlaa = "http://www.twxs8.com/31_31301/";
+
+        //替換代理ip
+        basePath = basePath.replace("www.twxs8.com", "8.142.64.80:8090/wqx");
+        webUrlaa = webUrlaa.replace("www.twxs8.com", "8.142.64.80:8090/wqx");
+        System.out.println(basePath);
+        System.out.println(webUrlaa);
 
         List<String> list = new LinkedList<String>();
         list.add("a");
@@ -274,6 +340,8 @@ public class JsoupController extends BaseController{
         list.add("d");
         String aaa = CollectionUtils.firstElement(Arrays.asList("c"));
         String hehe = CollectionUtils.lastElement(Arrays.asList("c"));
+        Collections.reverse(list);
+        System.out.println(list);
         System.out.println(aaa);
 
 

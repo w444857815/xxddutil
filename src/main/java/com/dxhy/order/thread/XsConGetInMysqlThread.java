@@ -3,10 +3,12 @@ package com.dxhy.order.thread;
 import com.dxhy.order.model.XsContent;
 import com.dxhy.order.service.XsContentService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -42,6 +44,8 @@ public class XsConGetInMysqlThread implements Runnable {
 
     private CountDownLatch downLatch;
 
+    //章节储存目录
+    private String conFolderPath;
 
 
 
@@ -50,7 +54,8 @@ public class XsConGetInMysqlThread implements Runnable {
                                  String contentId,
                                  int zjOrder,
                                  XsContentService xsContentService,
-                                 CountDownLatch downLatch
+                                 CountDownLatch downLatch,
+                                 String conFolderPath
 
     ) {
         this.xsConId = xsConId;
@@ -59,6 +64,7 @@ public class XsConGetInMysqlThread implements Runnable {
         this.zjOrder = zjOrder;
         this.xsContentService = xsContentService;
         this.downLatch = downLatch;
+        this.conFolderPath = conFolderPath;
     }
 
     @Override
@@ -73,12 +79,20 @@ public class XsConGetInMysqlThread implements Runnable {
             //详情的内容
             String content = contentDoc.getElementById(contentId).text();
 
+            String conPath = conFolderPath+File.separator+zjOrder+".txt";
+            //log.info("{}章节储存位置:{}",zjOrder,conPath);
+            File conFile = new File(conPath);
+            if(!conFile.exists()){
+                conFile.createNewFile();
+            }
+            FileUtils.writeStringToFile(conFile,content,"UTF-8");
+
             XsContent con = new XsContent();
             con.setId(xsConId);
-            con.setContent(content);
+            con.setContent(conPath);
             con.setIsSuc("1");
             xsContentService.updateByPrimaryKeySelective(con);
-            
+
             log.info("文章第{}条获取成功",zjOrder);
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,6 +106,10 @@ public class XsConGetInMysqlThread implements Runnable {
         }
         downLatch.countDown();
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println(File.separator);
     }
 
 

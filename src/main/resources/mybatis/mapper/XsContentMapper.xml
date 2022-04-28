@@ -222,7 +222,7 @@
 				and book_name = #{bookName,jdbcType=VARCHAR}
 			</if>
 			<if test="zjOrder != null" >
-				and zj_order = #{zjOrder,jdbcType=INTEGER}
+				and zj_order > #{zjOrder,jdbcType=INTEGER}
 			</if>
 			<if test="zjTitle != null" >
 				and zj_title = #{zjTitle,jdbcType=VARCHAR}
@@ -275,6 +275,44 @@
 		</where>
 		order by zj_order
 	</select>
+
+	<select id="selectLastZjByConditionNoCon" resultMap="BaseResultMap">
+		select
+		<!--<include refid="Base_Column_List" />-->
+		zj_url,
+		zj_order
+		from xs_content
+		<where>
+			<if test="id != null" >
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="bookId != null" >
+				and book_id = #{bookId,jdbcType=VARCHAR}
+			</if>
+			<if test="bookName != null" >
+				and book_name = #{bookName,jdbcType=VARCHAR}
+			</if>
+			<if test="zjOrder != null" >
+				and zj_order = #{zjOrder,jdbcType=INTEGER}
+			</if>
+			<if test="zjTitle != null" >
+				and zj_title = #{zjTitle,jdbcType=VARCHAR}
+			</if>
+			<if test="zjUrl != null" >
+				and zj_url = #{zjUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="isSuc != null" >
+				and is_suc = #{isSuc,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null" >
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+
+		order by zj_order desc
+		limit 1
+	</select>
+
 	<select id="queryCount" resultType="java.lang.Long" parameterType="java.util.Map">
 		select
 		count(1)

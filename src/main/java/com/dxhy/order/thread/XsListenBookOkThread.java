@@ -40,7 +40,7 @@ public class XsListenBookOkThread implements Runnable {
 
     private String contentId;
 
-
+    private String conFolderPath;
 
 
 
@@ -50,7 +50,8 @@ public class XsListenBookOkThread implements Runnable {
                                 String fileName,
                                 XsContentService xsContentService,
                                 String dzsPath,
-                                String contentId
+                                String contentId,
+                                String conFolderPath
 
     ) {
         this.bookId = bookId;
@@ -60,6 +61,7 @@ public class XsListenBookOkThread implements Runnable {
         this.xsContentService = xsContentService;
         this.dzsPath = dzsPath;
         this.contentId = contentId;
+        this.conFolderPath = conFolderPath;
     }
 
     @Override
@@ -93,7 +95,7 @@ public class XsListenBookOkThread implements Runnable {
                 CountDownLatch lastdownLatch = new CountDownLatch(failList.size());
                 for (int i = 0; i < failList.size(); i++) {
                     //新开多线程去爬取失败的。
-                    XsConLastGetThread last = new XsConLastGetThread(failList.get(i).getId(), failList.get(i).getZjUrl(), contentId, failList.get(i).getZjOrder(), xsContentService,lastdownLatch);
+                    XsConLastGetThread last = new XsConLastGetThread(failList.get(i).getId(), failList.get(i).getZjUrl(), contentId, failList.get(i).getZjOrder(), xsContentService,lastdownLatch,conFolderPath);
                     Thread lastThread = new Thread(last);
                     lastThread.start();
                 }
@@ -120,7 +122,13 @@ public class XsListenBookOkThread implements Runnable {
         xscon.setIsSuc("1");
         List<XsContent> conList = xsContentService.selectByCondition(xscon);
         for (int i = 0; i < conList.size(); i++) {
-            FileUtils.writeStringToFile(new File(savePath), " "+conList.get(i).getZjTitle()+"\n\t" + "    "+conList.get(i).getContent()+"\n\t","UTF-8",true);
+            String fileContent = "";
+            try {
+                fileContent = FileUtils.readFileToString(new File(conList.get(i).getContent()), "UTF-8");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            FileUtils.writeStringToFile(new File(savePath), " "+conList.get(i).getZjTitle()+"\n\t" + "    "+fileContent+"\n\t","UTF-8",true);
         }
 
         //生成书以后，记录下现在最大的order是多少。下次查询就从这个书往后查,线程外面的for里的order需要设置下

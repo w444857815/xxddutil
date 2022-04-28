@@ -80,3 +80,4 @@ mail:
 #电子书储存路径
 dzs:
   path: E://
+  conPath: E://dzsContent//
