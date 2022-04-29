@@ -5,14 +5,14 @@
 		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="book_name" property="bookName" jdbcType="VARCHAR" />
 		<result column="book_url" property="bookUrl" jdbcType="VARCHAR" />
-		<result column="all_size" property="allSize" jdbcType="java.lang.Integer" />
+		<result column="all_size" property="allSize" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List" >
 		id,
 		book_name,
 		book_url,
-		allSize,
+		all_size,
 		create_time
   </sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >

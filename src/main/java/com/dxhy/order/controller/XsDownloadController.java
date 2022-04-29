@@ -253,7 +253,7 @@ public class XsDownloadController extends BaseController{
             Element bookNameEle = doc.getElementById(bookNameId);
 
             //如果没有获取到书名，说明其他也没获取到，直接返回地址错
-            if(ObjectUtil.isNotNull(bookNameEle)){
+            if(ObjectUtil.isNull(bookNameEle)){
                 return getFailRtn("网址错误，请确认网址");
             }
 
@@ -291,8 +291,23 @@ public class XsDownloadController extends BaseController{
                 book.setCreateTime(new Date());
                 xsBookService.insertSelective(book);
 
-                CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
-                XsNewBookThread newBookThread = new XsNewBookThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conPath,childElements,proxyUrl);
+                int countDownSize = 0;
+                //获取要countdown的线程数
+                for (int i = 0; i <childElements.get(0).children().size() ; i++) {
+                    Element a = childElements.get(0).children().get(i).getAllElements().select("a").first();
+                    String conUrl = "";
+                    if(ObjectUtil.isNotNull(a)){
+                        conUrl = childElements.get(0).children().get(i).getElementsByTag("a").first().attr("abs:href");
+                    }
+                    if(StringUtils.isNotEmpty(conUrl)){
+                        countDownSize++;
+                    }
+                }
+
+                CountDownLatch downLatch = new CountDownLatch(countDownSize);
+//                CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
+
+                XsNewBookThread newBookThread = new XsNewBookThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conFolderPath,childElements,proxyUrl);
                 Thread nBt = new Thread(newBookThread);
                 nBt.start();
 
@@ -362,14 +377,15 @@ public class XsDownloadController extends BaseController{
 
                 downLatch.await();
 
+                //新的章节爬取完，发邮件
+                XsContent xscon = new XsContent();
+                xscon.setBookId(bookId);
+                xscon.setZjOrder(lastOrder);
+                createFileAndSendMail(xscon,savePath,fileName,emailAddress);
             }
 
 
-            //新的章节爬取完，发邮件
-            XsContent xscon = new XsContent();
-            xscon.setBookId(bookId);
-            xscon.setZjOrder(lastOrder);
-            createFileAndSendMail(xscon,savePath,fileName,emailAddress);
+
 
 
             log.info("走完");

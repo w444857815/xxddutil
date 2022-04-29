@@ -159,7 +159,23 @@ public class JsoupController extends BaseController{
                 xsBookService.insertSelective(book);
 
                 ExecutorService executorService = Executors.newFixedThreadPool(3);
-                CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
+
+
+                int countDownSize = 0;
+                //获取要countdown的线程数
+                for (int i = 0; i <childElements.get(0).children().size() ; i++) {
+                    Element a = childElements.get(0).children().get(i).getAllElements().select("a").first();
+                    String conUrl = "";
+                    if(ObjectUtil.isNotNull(a)){
+                        conUrl = childElements.get(0).children().get(i).getElementsByTag("a").first().attr("abs:href");
+                    }
+                    if(StringUtils.isNotEmpty(conUrl)){
+                        countDownSize++;
+                    }
+                }
+
+//                CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
+                CountDownLatch downLatch = new CountDownLatch(countDownSize);
 
                 //设置一个监听线程，当所有爬取动作都跑完后，生成书，发邮件
                 XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conPath);
@@ -200,6 +216,9 @@ public class JsoupController extends BaseController{
                         //conThread.start();
                     }
                 }
+
+
+
                 executorService.shutdown();
                 //downLatch.await();
             }else{
@@ -268,15 +287,12 @@ public class JsoupController extends BaseController{
 
                 downLatch.await();
 
-
+                //新的章节爬取完，发邮件
+                XsContent xscon = new XsContent();
+                xscon.setBookId(bookId);
+                xscon.setZjOrder(lastOrder);
+                createFileAndSendMail(xscon,savePath,fileName,emailAddress);
             }
-
-
-            //新的章节爬取完，发邮件
-            XsContent xscon = new XsContent();
-            xscon.setBookId(bookId);
-            xscon.setZjOrder(lastOrder);
-            createFileAndSendMail(xscon,savePath,fileName,emailAddress);
 
 
             log.info("走完");
@@ -324,8 +340,17 @@ public class JsoupController extends BaseController{
     }
 
     public static void main(String[] args) throws Exception {
+
+
+
         String basePath = "http://www.twxs8.com";
-        String webUrlaa = "http://www.twxs8.com/31_31301/";
+        String webUrlaa = "http://www.twxs8.com/32_32205/";
+
+        System.out.println(getHtml(webUrlaa));
+        if(true){
+            return ;
+        }
+
 
         //替換代理ip
         basePath = basePath.replace("www.twxs8.com", "8.142.64.80:8090/wqx");

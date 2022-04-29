@@ -288,6 +288,14 @@
             </activation>
         </profile>
 
+        <!-- mac环境 -->
+        <profile>
+            <id>mac</id>
+            <properties>
+                <deployType>mac</deployType>
+            </properties>
+        </profile>
+
         <!-- 正式环境 -->
         <profile>
             <id>prod</id>

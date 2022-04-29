@@ -86,7 +86,6 @@ public class XsNewBookThread implements Runnable {
     public void run() {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-
         //设置一个监听线程，当所有爬取动作都跑完后，生成书，发邮件
         XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conFolderPath);
         Thread runThread = new Thread(listenThread);

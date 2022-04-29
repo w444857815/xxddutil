@@ -1,0 +1,86 @@
+spring:
+  datasource:
+    #MySQL数据库支持配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #测试
+    url: jdbc:mysql://localhost:3306/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: root
+    #生产
+#    url: jdbc:mysql://10.1.1.224:3306/wk?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    username: dxhy
+#    password: Dxhy@123
+  #redis config
+  redis:
+    host: 10.1.2.37
+    port: 6379
+    password: redis-dev
+    database: 4
+
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled : false
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+
+
+mybatis:
+  mapper-locations: classpath:mybatis/*/*.xml
+  configuration:
+    #sql日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  config-location: classpath:mybatis/mybatis-config.xml
+  type-aliases-package: com.example.demo.dao
+
+# 0 mysql 1 oracle
+dataType: 0
+
+databaseName:
+  c48: invoice_c48_gaodeng
+  bw: invoice_bw_gaodeng
+  a9: invoice_a9_xmgm
+
+file:
+  uploadPath: /root/uploadFiles/
+
+pagehelper:
+#  helper-dialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql
+  # 默认false,当为true时，自动检验适合的数据库
+  auto-dialect: true
+  # 这个一定要加上，不然mysql和oracle分页两个只能用一个，另一个会报错，加上后，两中数据库分页都可以用了
+  auto-runtime-dialect: true
+  row-bounds-with-count: true
+
+
+mail:
+  #发邮件的账号密码
+  addressPass: 1839940670@qq.com~~usxwimllcjrjeidc
+  senderName: 统一发送人
+  logoPath: E:/workspace/xxddutil/src/main/resources/logo.jpg
+  qq:
+    smtphost: SMTP.qq.com
+    hostport: 587
+    #两个端口都可用，一个不行就换另一个
+#    hostport: 465
+    auth: true
+    smtpname: SMTPS
+  126:
+    smtphost: smtp.126.com
+    hostport: 465
+    auth: true
+    smtpname: SMTPS
+#电子书储存路径
+dzs:
+  path: /Users/ziye/dzsFiles/
+  conPath: /Users/ziye/dzsFiles/dzsContents/
+serviceProject:
+  ipadd: 10.1.30.37

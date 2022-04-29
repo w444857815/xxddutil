@@ -88,7 +88,10 @@
 <input type="button" id="anniu" style="height: 30px" value="开始下载并发送" onclick="zhuanJson()"> <br>
 <span id="result"></span>
 <br><br><br><br>
-
+下面内容无须理会 <br>
+此网站列表xpath路径(<span style="color: red">图1</span>):<input id="listXpath" value="/html/body/div[4]/div[2]/dl"></input> <br>
+书名id(列表页<span style="color: red">图2</span>):<input id="bookName" value="info"><br>
+详情文章id(文章详情页<span style="color: red">图3</span>):<input id="contentId" value = "content"><br>
 
 </body>
 </html>
