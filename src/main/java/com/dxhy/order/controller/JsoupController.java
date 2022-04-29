@@ -201,7 +201,7 @@ public class JsoupController extends BaseController{
                     }
                 }
                 executorService.shutdown();
-                downLatch.await();
+                //downLatch.await();
             }else{
                 log.info("此书已经有，把没有爬取到的继续爬取");
                 bookId = bookList.get(0).getId();
