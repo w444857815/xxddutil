@@ -25,6 +25,14 @@ public class XsBook implements Serializable {
 	 * 书地址
 	 */
 	private String bookUrl;
+
+	/**
+	* @Description TODO
+	* @Return
+	* @Author wangruwei
+	* @Date 2022/4/29 14:45
+	**/
+	private int allSize;
     /**
      * 创建时间  
      */ 	

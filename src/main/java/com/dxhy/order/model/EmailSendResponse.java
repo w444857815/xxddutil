@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * @author ：杨士勇
+ * @author ：王汝伟
  * @ClassName ：OpenApiResponse
  * @Description ：
  * @date ：2020年4月16日 上午10:56:24

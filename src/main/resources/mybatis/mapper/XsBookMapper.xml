@@ -5,12 +5,14 @@
 		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="book_name" property="bookName" jdbcType="VARCHAR" />
 		<result column="book_url" property="bookUrl" jdbcType="VARCHAR" />
+		<result column="all_size" property="allSize" jdbcType="java.lang.Integer" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List" >
 		id,
 		book_name,
 		book_url,
+		allSize,
 		create_time
   </sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -52,6 +54,9 @@
 			<if test="bookUrl != null" >
 				book_url,
 			</if>
+			<if test="allSize != null" >
+				all_size,
+			</if>
 			<if test="createTime != null" >
 				create_time,
 			</if>
@@ -66,6 +71,9 @@
 			<if test="bookUrl != null" >
 				#{bookUrl,jdbcType=VARCHAR},
 			</if>
+			<if test="allSize != null" >
+				#{allSize,jdbcType=VARCHAR},
+			</if>
 			<if test="createTime != null" >
 				#{createTime,jdbcType=TIMESTAMP},
 			</if>
@@ -79,6 +87,9 @@
 			</if>
 			<if test="bookUrl != null" >
 				book_url = #{bookUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="allSize != null" >
+				all_size = #{allSize,jdbcType=VARCHAR},
 			</if>
 			<if test="createTime != null" >
 				create_time = #{createTime,jdbcType=TIMESTAMP},

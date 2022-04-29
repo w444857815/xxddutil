@@ -82,3 +82,5 @@ mail:
 dzs:
   path: /root/dzsFiles/
   conPath: /root/dzsFiles/dzsContents/
+serviceProject:
+  ipadd: 10.1.30.37

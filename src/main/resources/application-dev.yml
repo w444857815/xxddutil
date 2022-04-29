@@ -81,3 +81,5 @@ mail:
 dzs:
   path: E://
   conPath: E://dzsContent//
+serviceProject:
+  ipadd: 10.1.30.37

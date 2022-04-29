@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author ：杨士勇
+ * @author ：王汝伟
  * @ClassName ：OrderInfoServiceImpl
  * @Description ：订单信息实现类
  * @date ：2018年7月21日 下午5:53:27

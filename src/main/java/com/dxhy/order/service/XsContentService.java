@@ -7,7 +7,7 @@ import com.dxhy.order.model.XsContent;
 import java.util.List;
 
 /**
- * @author ：杨士勇
+ * @author ：王汝伟
  * @ClassName ：ApiOrderInfoService
  * @Description ：订单查询，插入，更新，删除操作
  * @date ：2018年7月21日 下午5:37:00
