@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dxhy.order.dao.XsUserMapper" >
+  <resultMap id="BaseResultMap" type="com.dxhy.order.model.XsUser" >
+			 <id column="id" property="id" jdbcType="VARCHAR" />
+			<result column="username" property="username" jdbcType="VARCHAR" />
+			<result column="password" property="password" jdbcType="VARCHAR" />
+			<result column="email_address" property="emailAddress" jdbcType="VARCHAR" />
+			<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+		id,
+		username,
+		password,
+		email_address,
+		create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from xs_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+	delete from xs_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.dxhy.order.model.XsUser" >
+	<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+  		SELECT LAST_INSERT_ID() AS id
+  	</selectKey>
+    insert into xs_user (
+			id,
+			username,
+			password,
+			email_address,
+			create_time
+	)
+    values (
+			#{id,jdbcType=VARCHAR},
+			#{username,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{emailAddress,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP}
+	  )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dxhy.order.model.XsUser" >
+    insert into xs_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="id != null" >
+		id,
+		</if>
+		<if test="username != null" >
+		username,
+		</if>
+		<if test="password != null" >
+		password,
+		</if>
+		<if test="emailAddress != null" >
+		email_address,
+		</if>
+		<if test="createTime != null" >
+		create_time,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+		<if test="id != null" >
+		#{id,jdbcType=VARCHAR},
+		</if>
+		<if test="username != null" >
+		#{username,jdbcType=VARCHAR},
+		</if>
+		<if test="password != null" >
+		#{password,jdbcType=VARCHAR},
+		</if>
+		<if test="emailAddress != null" >
+		#{emailAddress,jdbcType=VARCHAR},
+		</if>
+		<if test="createTime != null" >
+		#{createTime,jdbcType=TIMESTAMP},
+		</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dxhy.order.model.XsUser" >
+    update xs_user
+    <set >
+	<if test="username != null" >
+	username = #{username,jdbcType=VARCHAR},
+	</if>
+	<if test="password != null" >
+	password = #{password,jdbcType=VARCHAR},
+	</if>
+	<if test="emailAddress != null" >
+	email_address = #{emailAddress,jdbcType=VARCHAR},
+	</if>
+	<if test="createTime != null" >
+	create_time = #{createTime,jdbcType=TIMESTAMP},
+	</if>
+    </set>
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dxhy.order.model.XsUser" >
+    update xs_user
+    set 
+			username = #{username,jdbcType=VARCHAR},
+			password = #{password,jdbcType=VARCHAR},
+			email_address = #{emailAddress,jdbcType=VARCHAR},
+			create_time = #{createTime,jdbcType=TIMESTAMP}
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+   <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from xs_user
+  </select>
+  <delete id="batchDelete">
+	delete from xs_user
+    where id IN (${ids})
+  </delete>
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from xs_user
+	<where>
+	<if test="id != null" >
+	and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="username != null" >
+	and username = #{username,jdbcType=VARCHAR}
+	</if>
+	<if test="password != null" >
+	and password = #{password,jdbcType=VARCHAR}
+	</if>
+	<if test="emailAddress != null" >
+	and email_address = #{emailAddress,jdbcType=VARCHAR}
+	</if>
+	<if test="createTime != null" >
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+	</if>
+	</where>
+  </select>
+  <select id="queryCount" resultType="java.lang.Long" parameterType="java.util.Map">
+	 select 
+    count(1)
+    from xs_user
+	<include refid="page_where"/>
+  </select>
+  <select id="queryPageResult" resultType="java.util.Map" parameterType="java.util.Map">
+	select 
+    <include refid="Base_Column_List" />
+    from xs_user
+	<include refid="page_where"/>
+	<include refid="page_order"/>
+	<include refid="page_limit"/>
+  </select>
+  <sql  id="page_where">
+  <where>
+	<if test="username != null" >
+		and username = #{username,jdbcType=VARCHAR}
+	</if>
+	<if test="password != null" >
+		and password = #{password,jdbcType=VARCHAR}
+	</if>
+	<if test="emailAddress != null" >
+		and email_address = #{emailAddress,jdbcType=VARCHAR}
+	</if>
+	<if test="createTimeStart != null" >
+		and create_time &gt;= #{createTimeStart}
+	</if>
+	<if test="createTimeEnd != null" >
+		and create_time &lt;= #{createTimeEnd}
+	</if>
+  </where>
+  </sql>
+  <sql  id="page_order">
+	<if test="orderStr != null and orderStr != ''" >
+  		order by ${orderStr}
+  	</if>
+  </sql>
+  <sql id="page_limit">
+  	<if test="curRow!=null and limitSize!='' ">limit #{curRow},#{limitSize}</if>
+  </sql>
+</mapper>
