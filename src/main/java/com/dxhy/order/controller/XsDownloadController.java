@@ -5,10 +5,7 @@ import com.dxhy.order.model.TjSongmovie;
 import com.dxhy.order.model.XsBook;
 import com.dxhy.order.model.XsContent;
 import com.dxhy.order.model.XsUser;
-import com.dxhy.order.service.ApiWankeService;
-import com.dxhy.order.service.XsBookService;
-import com.dxhy.order.service.XsContentService;
-import com.dxhy.order.service.XsUserService;
+import com.dxhy.order.service.*;
 import com.dxhy.order.thread.XsConGetInMysqlThread;
 import com.dxhy.order.thread.XsListenBookOkThread;
 import com.dxhy.order.thread.xsPageThread.XsNewBookThread;
@@ -73,7 +70,8 @@ public class XsDownloadController extends BaseController{
     @Value("${serviceProject.ipadd}")
     private String ipadd;
 
-
+    @Value("${project.name}")
+    private String projectName;
 
 
 
@@ -85,6 +83,9 @@ public class XsDownloadController extends BaseController{
 
     @Autowired
     private XsUserService xsUserService;
+
+    @Autowired
+    private RedisService redisService;
 
     /**
     * @Description 下载页面
@@ -101,71 +102,6 @@ public class XsDownloadController extends BaseController{
         return model;
     }
 
-    @GetMapping("/xsUserAddPage")
-    public ModelAndView xsUserAddPage(){
-        ModelAndView model = new ModelAndView();
-        model.setViewName("ligerui/myWork/jsoup/xsUserAdd");
-
-        return model;
-    }
-
-
-    @RequestMapping(value = "xsUserAdd")
-    @ResponseBody
-    public Map<String, Object> xsUserAdd(String username,String password,String emailAddress,HttpSession session) {
-        if(StringUtils.isEmpty(username)){
-            return getFailRtn("用户名不能为空");
-        }
-        if(StringUtils.isEmpty(password)){
-            return getFailRtn("密码不能为空");
-        }
-        if(StringUtils.isNotEmpty(emailAddress)){
-            emailAddress = emailAddress.trim();
-            if(!EmailUtils.validateEmail(emailAddress)){
-                return getFailRtn("邮箱地址不正确");
-            }
-        }
-        XsUser xsUser = new XsUser();
-        xsUser.setUsername(username.trim());
-        List<XsUser> list = xsUserService.selectByCondition(xsUser);
-        if(list.size()>0){
-            return getFailRtn("此用户名已存在");
-        }
-
-        xsUser.setPassword(password.trim());
-        xsUser.setEmailAddress(emailAddress);
-        xsUser.setCreateTime(new Date());
-        xsUser.setId(UUID.randomUUID().toString().replace("-", ""));
-        int i = xsUserService.insertSelective(xsUser);
-        if(i>0){
-            session.setAttribute("xsUserloginName", username.trim());
-            return getSussRtn("", "注册成功");
-        }
-        return getFailRtn("注册失败");
-    }
-
-    @RequestMapping(value = "xsUserLogin")
-    @ResponseBody
-    public Map<String, Object> xsUserLogin(String username,String password,HttpSession session) {
-        if(StringUtils.isEmpty(username)){
-            return getFailRtn("用户名不能为空");
-        }
-        if(StringUtils.isEmpty(password)){
-            return getFailRtn("密码不能为空");
-        }
-        XsUser xsUser = new XsUser();
-        xsUser.setUsername(username.trim());
-        xsUser.setPassword(password.trim());
-        List<XsUser> list = xsUserService.selectByCondition(xsUser);
-        if(list.size()==0){
-            return getFailRtn("用户名或密码错，重新输入");
-        }
-        else{
-            session.setAttribute("xsUserloginName", list.get(0).getUsername());
-            log.info("设置session：xsUserloginName:{}",list.get(0).getUsername());
-            return getSussRtn("", "登陆成功，可下载");
-        }
-    }
 
     /**
     * @Description 当前进度查看
@@ -278,6 +214,14 @@ public class XsDownloadController extends BaseController{
                 log.info("没有书，直接创建，爬取，生成。创建章节目录");
                 bookId = UUID.randomUUID().toString().replace("-", "");
 
+                String isDownloading = redisService.get(bookId);
+                log.info("判断此书是否在下载中:{}",isDownloading);
+                if(StringUtils.isNotEmpty(isDownloading)){
+                    log.info("此书正在下载中，不允许重复下载");
+                    return getFailRtn("正在下载中，可点链接查看进度"+getDownLoadUrl(bookId));
+                }
+                redisService.set(bookId, "下载中");
+
                 String conFolderPath = conPath+bookId;
                 log.info("通过书创建的路径是:{}"+conFolderPath);
                 File zjConFolder = new File(conFolderPath);
@@ -307,13 +251,22 @@ public class XsDownloadController extends BaseController{
                 CountDownLatch downLatch = new CountDownLatch(countDownSize);
 //                CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
 
-                XsNewBookThread newBookThread = new XsNewBookThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conFolderPath,childElements,proxyUrl);
+                XsNewBookThread newBookThread = new XsNewBookThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conFolderPath,childElements,proxyUrl,redisService);
                 Thread nBt = new Thread(newBookThread);
                 nBt.start();
 
             }else{
                 log.info("此书已经有，把没有爬取到的继续爬取");
                 bookId = bookList.get(0).getId();
+
+                String isDownloading = redisService.get(bookId);
+                log.info("判断此书是否在下载中:{}",isDownloading);
+                if(StringUtils.isNotEmpty(isDownloading)){
+                    log.info("此书正在下载中，不允许重复下载");
+                    return getFailRtn("正在下载中，可点链接查看进度");
+                }
+                redisService.set(bookId, "下载中");
+
                 String conFolderPath = conPath+bookId;
                 XsContent conParams = new XsContent();
                 conParams.setBookId(bookId);
@@ -377,6 +330,8 @@ public class XsDownloadController extends BaseController{
 
                 downLatch.await();
 
+                redisService.del(bookId);
+
                 //新的章节爬取完，发邮件
                 XsContent xscon = new XsContent();
                 xscon.setBookId(bookId);
@@ -384,13 +339,13 @@ public class XsDownloadController extends BaseController{
                 createFileAndSendMail(xscon,savePath,fileName,emailAddress);
             }
 
-
+            //记录用户和书的关系，谁下载的
 
 
 
             log.info("走完");
 
-            return getSussRtn("爬取成功，耐心等待", "爬取成功，耐心等待。可点击{}"+ipadd+"/nowNum?bookId="+bookId);
+            return getSussRtn("爬取成功，耐心等待", "爬取成功，耐心等待。可点击"+getDownLoadUrl(bookId));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -401,6 +356,12 @@ public class XsDownloadController extends BaseController{
             return getFailRtn("获取失败，联系管理员");
         }
 
+    }
+
+    private String getDownLoadUrl(String bookId) {
+        //String url = "http://localhost:8080/order-api/xsdown/downloadProgress?bookId=490165b0a0004725a9f86593b2785ac9";
+        String url = "http://"+ipadd+":8080/"+projectName+"/xsdown/downloadProgress?bookId="+bookId;
+        return url;
     }
 
 
@@ -554,7 +515,106 @@ public class XsDownloadController extends BaseController{
         return rootPage.asXml();
     }*/
 
+    @GetMapping("/xsUserAddPage")
+    public ModelAndView xsUserAddPage(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/jsoup/xsUserAdd");
 
+        return model;
+    }
+
+    @GetMapping("/xsUserLoginPage")
+    public ModelAndView xsUserLoginPage(){
+        ModelAndView model = new ModelAndView();
+        model.setViewName("ligerui/myWork/jsoup/xsUserLogin");
+
+        return model;
+    }
+
+
+    @RequestMapping(value = "xsUserAdd")
+    @ResponseBody
+    public Map<String, Object> xsUserAdd(String username,String password,String emailAddress,HttpSession session) {
+        if(StringUtils.isEmpty(username)){
+            return getFailRtn("用户名不能为空");
+        }
+        if(StringUtils.isEmpty(password)){
+            return getFailRtn("密码不能为空");
+        }
+        if (StringUtils.isBlank(emailAddress)) {
+            return getFailRtn("邮箱不能为空");
+        }
+        if(StringUtils.isNotEmpty(emailAddress)){
+            emailAddress = emailAddress.trim();
+            if(!EmailUtils.validateEmail(emailAddress)){
+                return getFailRtn("邮箱地址不正确");
+            }
+        }
+        XsUser xsUser = new XsUser();
+        xsUser.setUsername(username.trim());
+        List<XsUser> list = xsUserService.selectByCondition(xsUser);
+        if(list.size()>0){
+            return getFailRtn("此用户名已存在");
+        }
+
+        xsUser.setPassword(password.trim());
+        xsUser.setEmailAddress(emailAddress);
+        xsUser.setCreateTime(new Date());
+        xsUser.setId(UUID.randomUUID().toString().replace("-", ""));
+        int i = xsUserService.insertSelective(xsUser);
+        if(i>0){
+            session.setAttribute("xsUserloginName", username.trim());
+            return getSussRtn("", "注册成功");
+        }
+        return getFailRtn("注册失败");
+    }
+
+
+
+    @RequestMapping(value = "xsUserLogin")
+    @ResponseBody
+    public Map<String, Object> xsUserLogin(String username,String password,HttpSession session) {
+        if(StringUtils.isEmpty(username)){
+            return getFailRtn("用户名不能为空");
+        }
+        if(StringUtils.isEmpty(password)){
+            return getFailRtn("密码不能为空");
+        }
+        XsUser xsUser = new XsUser();
+        xsUser.setUsername(username.trim());
+        xsUser.setPassword(password.trim());
+        List<XsUser> list = xsUserService.selectByCondition(xsUser);
+        if(list.size()==0){
+            return getFailRtn("用户名或密码错，重新输入");
+        }
+        else{
+            session.setAttribute("xsUserloginName", list.get(0).getUsername());
+            log.info("设置session：xsUserloginName:{}",list.get(0).getUsername());
+            return getSussRtn(list.get(0), "登陆成功，可下载");
+        }
+    }
+
+
+    @RequestMapping(value = "downloadProgress")
+    @ResponseBody
+    public String downloadProgress(String bookId) {
+        if (StringUtils.isBlank(bookId)) {
+            return "已下载完";
+        }
+        XsBook book = new XsBook();
+        book.setId(bookId);
+        List<XsBook> xsBooks = xsBookService.selectByCondition(book);
+        if(xsBooks.size()==1){
+            XsContent xsAllSize = new XsContent();
+            xsAllSize.setBookId(bookId);
+            int allSize = xsContentService.selectCountByCondition(xsAllSize);
+            xsAllSize.setIsSuc("1");
+            int sucSize = xsContentService.selectCountByCondition(xsAllSize);
+            return "《"+xsBooks.get(0).getBookName()+"》---下载进度:"+sucSize+"/"+allSize;
+        }else{
+            return "无此链接或已下载完，请检查";
+        }
+    }
 
 
 }

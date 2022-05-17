@@ -6,7 +6,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>直接建线程</title>
+    <meta name="description"  content="免费电子书下载txt,电子书下载txt,电子书下载网站">
+    <meta name="keywords"  content="免费电子书下载txt,电子书下载txt,电子书下载网站">
+    <title>免费电子书下载txt,电子书下载txt,电子书下载网站</title>
     <link href="${pageContext.request.contextPath}/ligerui/lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
     <link href="${pageContext.request.contextPath}/ligerui/lib/ligerUI/skins/ligerui-icons.css" rel="stylesheet" type="text/css" />
     <script src="${pageContext.request.contextPath}/ligerui/lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
@@ -76,22 +78,58 @@
             });
 
         }
+
+        function xsUserLogin(){
+            $.ligerDialog.open({
+                url: '${pageContext.request.contextPath}/xsdown/xsUserLoginPage',
+                height: 200,
+                width: null
+            });
+
+        }
     </script>
 </head>
 <body>
 <input type="button" value="注册" onclick="xsUserAdd()">
-<h2 style="color: red">只输入网址和邮箱即可，其他勿动</h2>
-在此地址里找到书的列表页，可爬取此书全章节内容。<span>http://www.twxs8.com/5_5518/</span> <br>
-输入网页: <input id="webUrl" style="width: 200px;" value="http://www.twxs8.com/5_5518/"> <br>
-邮箱地址:<input id="emailAddress" value="444857815@qq.com"><br>
+<input type="button" value="登陆" onclick="xsUserLogin()">
+<br><br>
 
-<input type="button" id="anniu" style="height: 30px" value="开始下载并发送" onclick="zhuanJson()"> <br>
-<span id="result"></span>
-<br><br><br><br>
+<span style="font-size: 30px;">登陆状态</span><span style="font-size: 30px;color: green" id="loginstatus"></span>
+
+<br><br>
+
+<%--<h2 style="color: red">只输入网址和邮箱即可，其他勿动</h2>--%>
+在此地址里找到书的列表页，可爬取此书全章节内容。<span>例: http://www.twxs8.com/5_5518/</span> <br>
+输入网页: <input id="webUrl" style="width: 200px;" value=""> <br>
+邮箱地址:<input id="emailAddress" value=""><br>
+
+<input type="button" id="anniu" style="height: 30px;color: red;" value="开始下载并发送" onclick="zhuanJson()"> <br>
+<span id="result" style="color: red;font-size: 25px;"></span>
+<br>
+操作步骤:<br>
+第一步:点开http://www.twxs8.com 搜索要看的书<br>
+第二步:找到自己要看的书，点进去列表页面<br><img src="${pageContext.request.contextPath}/ligerui/myWork/jsoup/step2.jpg"><br>
+第三步:复制此链接到下载框，即可下载
+
+
+
+
+
+
+
+
+
+
+
+
+<div style="display: none">
 下面内容无须理会 <br>
 此网站列表xpath路径(<span style="color: red">图1</span>):<input id="listXpath" value="/html/body/div[4]/div[2]/dl"></input> <br>
 书名id(列表页<span style="color: red">图2</span>):<input id="bookName" value="info"><br>
 详情文章id(文章详情页<span style="color: red">图3</span>):<input id="contentId" value = "content"><br>
+</div>
+
+
 
 </body>
 </html>

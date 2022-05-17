@@ -60,6 +60,8 @@ pagehelper:
   auto-runtime-dialect: true
   row-bounds-with-count: true
 
+project:
+  name: ljfl
 
 mail:
   #发邮件的账号密码

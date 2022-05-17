@@ -60,6 +60,9 @@ pagehelper:
   row-bounds-with-count: true
 
 
+project:
+  name: order-api
+
 mail:
   #发邮件的账号密码
   addressPass: 1839940670@qq.com~~usxwimllcjrjeidc
@@ -80,6 +83,6 @@ mail:
 #电子书储存路径
 dzs:
   path: E://
-  conPath: E://dzsContent//
+  conPath: E:\dzsContent\
 serviceProject:
-  ipadd: 10.1.30.37
+  ipadd: 127.0.0.1

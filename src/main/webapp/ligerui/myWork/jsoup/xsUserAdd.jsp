@@ -92,6 +92,7 @@
                     if (data.code == "0000") {
                         // window.parent.guanbi();
                         alert(data.msg);
+                        $("#loginstatus",window.parent.document).html("登陆成功，可下载。发送至邮箱:"+emailAddress+" 可自行更改");
                         parent.$.ligerDialog.close();
                         parent.$(".l-dialog,.l-window-mask").remove();
                     } else {

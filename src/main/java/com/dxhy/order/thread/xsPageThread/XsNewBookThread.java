@@ -3,6 +3,7 @@ package com.dxhy.order.thread.xsPageThread;
 import cn.hutool.core.util.ObjectUtil;
 import com.dxhy.order.controller.MailController;
 import com.dxhy.order.model.XsContent;
+import com.dxhy.order.service.RedisService;
 import com.dxhy.order.service.XsContentService;
 import com.dxhy.order.thread.XsConGetInMysqlThread;
 import com.dxhy.order.thread.XsConLastGetThread;
@@ -55,6 +56,8 @@ public class XsNewBookThread implements Runnable {
 
     private String proxyUrl;
 
+    private RedisService redisService;
+
 
 
     public XsNewBookThread(String bookId,
@@ -66,7 +69,8 @@ public class XsNewBookThread implements Runnable {
                            String contentId,
                            String conFolderPath,
                            Elements childElements,
-                           String proxyUrl
+                           String proxyUrl,
+                           RedisService redisService
 
     ) {
         this.bookId = bookId;
@@ -79,6 +83,7 @@ public class XsNewBookThread implements Runnable {
         this.conFolderPath = conFolderPath;
         this.childElements = childElements;
         this.proxyUrl = proxyUrl;
+        this.redisService = redisService;
     }
 
     @SneakyThrows
@@ -87,7 +92,7 @@ public class XsNewBookThread implements Runnable {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         //设置一个监听线程，当所有爬取动作都跑完后，生成书，发邮件
-        XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conFolderPath);
+        XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conFolderPath,redisService);
         Thread runThread = new Thread(listenThread);
         runThread.start();
 

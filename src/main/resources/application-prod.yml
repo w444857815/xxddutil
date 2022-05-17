@@ -12,9 +12,9 @@ spring:
 #    password: Dxhy@123
   #redis config
   redis:
-    host: 10.1.2.37
+    host: 127.0.0.1
     port: 6379
-    password: redis-dev
+    password: redis-ali
     database: 4
 
   mvc:
@@ -60,6 +60,8 @@ pagehelper:
   auto-runtime-dialect: true
   row-bounds-with-count: true
 
+project:
+  name: ljfl
 
 mail:
   #发邮件的账号密码

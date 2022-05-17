@@ -2,6 +2,7 @@ package com.dxhy.order.thread;
 
 import com.dxhy.order.controller.MailController;
 import com.dxhy.order.model.XsContent;
+import com.dxhy.order.service.RedisService;
 import com.dxhy.order.service.XsContentService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -42,6 +43,8 @@ public class XsListenBookOkThread implements Runnable {
 
     private String conFolderPath;
 
+    private RedisService redisService;
+
 
 
     public XsListenBookOkThread(String bookId,
@@ -51,7 +54,8 @@ public class XsListenBookOkThread implements Runnable {
                                 XsContentService xsContentService,
                                 String dzsPath,
                                 String contentId,
-                                String conFolderPath
+                                String conFolderPath,
+                                RedisService redisService
 
     ) {
         this.bookId = bookId;
@@ -62,6 +66,7 @@ public class XsListenBookOkThread implements Runnable {
         this.dzsPath = dzsPath;
         this.contentId = contentId;
         this.conFolderPath = conFolderPath;
+        this.redisService = redisService;
     }
 
     @Override
@@ -116,6 +121,7 @@ public class XsListenBookOkThread implements Runnable {
             mail.emailSendForm(fileName+" 生成书出错", "下载失败，如有需要联系444857815@qq.com", emailAddress, "", "海洋小助手",null , false);
         }
 
+        redisService.del(bookId);
     }
 
     private void createFileAndSendMail(XsContent xscon, String savePath, MailController mail) throws IOException {

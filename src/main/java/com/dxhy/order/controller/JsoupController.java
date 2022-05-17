@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.dxhy.order.model.XsBook;
 import com.dxhy.order.model.XsContent;
 import com.dxhy.order.service.ApiWankeService;
+import com.dxhy.order.service.RedisService;
 import com.dxhy.order.service.XsBookService;
 import com.dxhy.order.service.XsContentService;
 import com.dxhy.order.thread.XsConGetInMysqlThread;
@@ -72,6 +73,8 @@ public class JsoupController extends BaseController{
     @Autowired
     private XsContentService xsContentService;
 
+    @Autowired
+    private RedisService redisService;
 
 
     /**
@@ -178,7 +181,7 @@ public class JsoupController extends BaseController{
                 CountDownLatch downLatch = new CountDownLatch(countDownSize);
 
                 //设置一个监听线程，当所有爬取动作都跑完后，生成书，发邮件
-                XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conPath);
+                XsListenBookOkThread listenThread = new XsListenBookOkThread(bookId, emailAddress,downLatch,fileName,xsContentService,dzsPath,contentId,conPath,redisService);
                 Thread runThread = new Thread(listenThread);
                 runThread.start();
 
