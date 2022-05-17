@@ -218,7 +218,7 @@ public class XsDownloadController extends BaseController{
                 log.info("判断此书是否在下载中:{}",isDownloading);
                 if(StringUtils.isNotEmpty(isDownloading)){
                     log.info("此书正在下载中，不允许重复下载");
-                    return getFailRtn("正在下载中，可点链接查看进度"+getDownLoadUrl(bookId));
+                    return getFailRtn("正在下载中，可访问链接查看进度"+getDownLoadUrl(bookId));
                 }
                 redisService.set(bookId, "下载中");
 
@@ -233,7 +233,7 @@ public class XsDownloadController extends BaseController{
                 book.setBookName(fileName);
 
                 book.setCreateTime(new Date());
-                xsBookService.insertSelective(book);
+
 
                 int countDownSize = 0;
                 //获取要countdown的线程数
@@ -247,6 +247,8 @@ public class XsDownloadController extends BaseController{
                         countDownSize++;
                     }
                 }
+                book.setAllSize(countDownSize);
+                xsBookService.insertSelective(book);
 
                 CountDownLatch downLatch = new CountDownLatch(countDownSize);
 //                CountDownLatch downLatch = new CountDownLatch(childElements.get(0).children().size());
@@ -263,7 +265,7 @@ public class XsDownloadController extends BaseController{
                 log.info("判断此书是否在下载中:{}",isDownloading);
                 if(StringUtils.isNotEmpty(isDownloading)){
                     log.info("此书正在下载中，不允许重复下载");
-                    return getFailRtn("正在下载中，可点链接查看进度");
+                    return getFailRtn("正在下载中，可访问链接查看进度"+getDownLoadUrl(bookId));
                 }
                 redisService.set(bookId, "下载中");
 
@@ -306,6 +308,13 @@ public class XsDownloadController extends BaseController{
 
                 Collections.reverse(newzjlist);
                 ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+                //更新书的总章节
+                XsBook xsBook = new XsBook();
+                xsBook.setId(bookId);
+                xsBook.setAllSize(bookList.get(0).getAllSize()+newzjlist.size());
+                xsBookService.updateByPrimaryKeySelective(xsBook);
+                log.info(bookList.get(0).getBookName()+"更新为共"+xsBook+"章");
 
                 CountDownLatch downLatch = new CountDownLatch(newzjlist.size());
                 for (int i = 0; i < newzjlist.size(); i++) {
@@ -607,7 +616,7 @@ public class XsDownloadController extends BaseController{
         if(xsBooks.size()==1){
             XsContent xsAllSize = new XsContent();
             xsAllSize.setBookId(bookId);
-            int allSize = xsContentService.selectCountByCondition(xsAllSize);
+            int allSize = xsBooks.get(0).getAllSize();
             xsAllSize.setIsSuc("1");
             int sucSize = xsContentService.selectCountByCondition(xsAllSize);
             return "《"+xsBooks.get(0).getBookName()+"》---下载进度:"+sucSize+"/"+allSize;

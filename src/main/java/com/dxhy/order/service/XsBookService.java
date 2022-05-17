@@ -17,4 +17,6 @@ public interface XsBookService {
     int insertSelective(XsBook book);
 
     List<XsBook> selectByCondition(XsBook book);
+
+    int updateByPrimaryKeySelective(XsBook xsBook);
 }

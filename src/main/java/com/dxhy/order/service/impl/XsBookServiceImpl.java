@@ -37,4 +37,9 @@ public class XsBookServiceImpl implements XsBookService {
     public List<XsBook> selectByCondition(XsBook book) {
         return xsBookMapper.selectByCondition(book);
     }
+
+    @Override
+    public int updateByPrimaryKeySelective(XsBook xsBook) {
+        return xsBookMapper.updateByPrimaryKeySelective(xsBook);
+    }
 }

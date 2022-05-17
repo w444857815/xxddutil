@@ -15,7 +15,7 @@ public interface XsBookMapper {
 
     Article selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Article record);
+    int updateByPrimaryKeySelective(XsBook record);
 
     int updateByPrimaryKey(Article record);
 
